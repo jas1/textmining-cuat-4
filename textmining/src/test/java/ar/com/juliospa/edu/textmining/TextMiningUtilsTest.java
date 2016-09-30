@@ -12,6 +12,7 @@ public class TextMiningUtilsTest {
 		String carpeta="/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/dataset/raw/lau-normativa/20150430_BASE_NORMATIVA";
 		List<Path> result = TextMiningUtils.scanForFiles(carpeta);
 		System.out.println(result.size());
+		result.forEach(pa -> System.out.println(pa.toFile().getAbsolutePath()));
 	}
 	
 }
