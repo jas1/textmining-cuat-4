@@ -1,14 +1,30 @@
 package ar.com.juliospa.edu.textmining;
 
+import java.io.File;
+import java.lang.reflect.Method;
 import java.nio.file.Path;
 import java.util.List;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.annotation.XmlElement;
 
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.client.solrj.response.UpdateResponse;
 import org.apache.solr.common.SolrDocumentList;
+import org.apache.solr.common.SolrInputDocument;
+import org.junit.Assert;
 import org.junit.Test;
+
+import ar.com.juliospa.edu.textmining.domain.Doc;
+import ar.com.juliospa.edu.textmining.domain.DocCollection;
+import ar.com.juliospa.edu.textmining.utils.TextMiningUtils;
+import ar.com.juliospa.edu.textmining.utils.Trec87ParserUtil;
 
 public class TextMiningUtilsTest {
 
@@ -20,10 +36,12 @@ public class TextMiningUtilsTest {
 		result.forEach(pa -> System.out.println(pa.toFile().getAbsolutePath()));
 	}
 
+	/**
+	 * para probar tirar consultas
+	 */
 	@Test
 	public void querySolrInstance() {
-		String urlString = "http://localhost:8983/solr/techproducts";
-		SolrClient client = new HttpSolrClient.Builder(urlString).build();
+		SolrClient client = getClientInstance("lau_normativa");
 
 		String queryStr ="mendoza";
 
@@ -43,6 +61,160 @@ public class TextMiningUtilsTest {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	private SolrClient getClientInstance(String indexName) {
+		String urlString = "http://localhost:8983/solr/"+indexName;
+		SolrClient client = new HttpSolrClient.Builder(urlString).build();
+		return client;
+	}
+	
+	/**
+	 * para cargar docs
+	 */
+	@Test
+	public void solrLoadDocs() {
+		SolrClient client = getClientInstance("gettingstarted");
+
+		try {
+			SolrInputDocument document = new SolrInputDocument();
+			document.addField("id", "552199");
+			document.addField("name", "Gouda cheese wheel");
+			document.addField("price", "49.99");
+			UpdateResponse response = client.add(document);
+			// Remember to commit your changes!
+			client.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void oshumedXMLReader() {
+		try {
+			String path= "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
+			String fileDb="ohsumed.87";
+
+			 try {
+
+				File file = new File(path+fileDb);
+				JAXBContext jaxbContext = JAXBContext.newInstance(DocCollection.class);
+
+				Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+				DocCollection docCol = (DocCollection) jaxbUnmarshaller.unmarshal(file);
+				System.out.println(docCol);
+
+			  } catch (JAXBException e) {
+				e.printStackTrace();
+			  }
+			
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * la idea de esto es agarrar el formato del dataset de la pagina y migrarlo a XML
+	 * @throws Exception 
+	 */
+	@Test
+	public void oshumedFormatToXML() {
+		try {
+			String path= "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/site_dl/";
+			String fileDb="ohsu-trec/trec9-train/ohsumed.87";
+			String fileOut="ohsumed.87.output.xml";
+			
+			Trec87ParserUtil parser = new Trec87ParserUtil();
+			DocCollection parsed = parser.parseDocCollectionFromFilePath(path+fileDb);
+			
+			File file = new File(path+fileOut);
+			JAXBContext jaxbContext = JAXBContext.newInstance(DocCollection.class);
+			Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+
+			// output pretty printed
+			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+
+			jaxbMarshaller.marshal(parsed, file);
+			//jaxbMarshaller.marshal(parsed, System.out);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Assert.fail();
+		}
+		Assert.assertTrue(true);
+		
+	}
+	
+	/**
+	 * borrar todos los docuemtnos de la coleccion
+	 */
+	@Test
+	public void deleteDocumentsFromCollection() {
+		
+		SolrClient client = getClientInstance("tp1");
+		try {
+			// esta comentado porque borra todo 
+			//client.deleteByQuery("*:*");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Assert.fail();
+		}
+		Assert.assertTrue(true);
+	}
+	
+	/** aca la idea es directo del formato trec al indice solr
+	 * pasar los datos al solr 
+	 * **/
+	@Test
+	public void oshumedFormatToSolrIndex() {
+		try {
+			// path donde este el archivo original
+			String path= "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/site_dl/";
+			String fileDb="ohsu-trec/trec9-train/ohsumed.87";
+			//String fileOut="ohsumed.87.output.xml";
+			
+			// parser
+			Trec87ParserUtil parser = new Trec87ParserUtil();
+			DocCollection parsed = parser.parseDocCollectionFromFilePath(path+fileDb);
+			// conexion con el solR ( tiene que estar levantado ) 
+			SolrClient client = getClientInstance("tp1");
+
+			// para cada doc , vamos a crear un solr 
+			for (Doc doc : parsed.getDocuments()) {
+				SolrInputDocument document = new SolrInputDocument();
+				// recorro todos los fields de la clase y los agrego al documento solr
+				// antes de hacer esto hay que dar de alta los 
+				document.addField(getFieldNameForXMl("Author",String.class,Doc.class), doc.getAuthor());
+				document.addField(getFieldNameForXMl("DocAbstract",String.class,Doc.class), doc.getDocAbstract());
+				document.addField(getFieldNameForXMl("Docno",Integer.class,Doc.class), doc.getDocno());
+				document.addField(getFieldNameForXMl("Id",Integer.class,Doc.class), doc.getId());
+				document.addField(getFieldNameForXMl("Mesh",String.class,Doc.class), doc.getMesh());
+				document.addField(getFieldNameForXMl("PublicationType",String.class,Doc.class), doc.getPublicationType());
+				document.addField(getFieldNameForXMl("Source",String.class,Doc.class), doc.getSource());
+				document.addField(getFieldNameForXMl("Title",String.class,Doc.class), doc.getTitle());
+				
+				// lo agrego al response
+				UpdateResponse response = client.add(document);
+//				System.out.println(response.getStatus());
+				// comiteo al server
+				client.commit();
+			}			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Assert.fail();
+		}
+		Assert.assertTrue(true);
+		
+	}
+	
+	public String getFieldNameForXMl(String domainName,Class<?> tipo,Class<?> clazz) throws NoSuchMethodException, SecurityException {
+		String fieldSetterMethod = "set"+domainName;
+		Method setterField = clazz.getMethod(fieldSetterMethod, tipo );
+		XmlElement xmElem = setterField.getAnnotation(XmlElement.class);
+		return xmElem.name();
 	}
 
 }

@@ -1,4 +1,4 @@
-package ar.com.juliospa.edu.textmining;
+package ar.com.juliospa.edu.textmining.utils;
 
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
