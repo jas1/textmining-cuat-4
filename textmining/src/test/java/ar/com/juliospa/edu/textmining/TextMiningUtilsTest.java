@@ -185,7 +185,9 @@ public class TextMiningUtilsTest {
 			for (Doc doc : parsed.getDocuments()) {
 				SolrInputDocument document = new SolrInputDocument();
 				// recorro todos los fields de la clase y los agrego al documento solr
-				// antes de hacer esto hay que dar de alta los 
+				// antes de hacer esto hay que dar de alta los campos
+				// agregar los campos que uso para indexar a mano en el solR admin
+				// solar admin > seleccionar la coleccion > schema > add field
 				document.addField(getFieldNameForXMl("Author",String.class,Doc.class), doc.getAuthor());
 				document.addField(getFieldNameForXMl("DocAbstract",String.class,Doc.class), doc.getDocAbstract());
 				document.addField(getFieldNameForXMl("Docno",Integer.class,Doc.class), doc.getDocno());
