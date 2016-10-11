@@ -1,6 +1,7 @@
 package ar.com.juliospa.edu.textmining;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.lang.reflect.Method;
 import java.nio.file.Path;
 import java.util.List;
@@ -23,8 +24,10 @@ import org.junit.Test;
 
 import ar.com.juliospa.edu.textmining.domain.Doc;
 import ar.com.juliospa.edu.textmining.domain.DocCollection;
+import ar.com.juliospa.edu.textmining.domain.QueryStringCollection;
 import ar.com.juliospa.edu.textmining.utils.TextMiningUtils;
 import ar.com.juliospa.edu.textmining.utils.Trec87ParserUtil;
+import ar.com.juliospa.edu.textmining.utils.Trec87QueryNormalizer;
 
 public class TextMiningUtilsTest {
 
@@ -217,6 +220,35 @@ public class TextMiningUtilsTest {
 		Method setterField = clazz.getMethod(fieldSetterMethod, tipo );
 		XmlElement xmElem = setterField.getAnnotation(XmlElement.class);
 		return xmElem.name();
+	}
+	
+	@Test
+	public void standarizeQueriesToXml(){
+		String path= "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
+		String fileQueries="query.ohsu.1-63.xml";
+		String fileQueriesNorm="query.ohsu.1-63.norm.v2.xml";
+		
+		Trec87QueryNormalizer normalizer = new Trec87QueryNormalizer();
+		try {
+			QueryStringCollection parsed = normalizer.parseQueryColFromFilePath(path+fileQueries);
+			File file = new File(path+fileQueriesNorm);
+			JAXBContext jaxbContext = JAXBContext.newInstance(QueryStringCollection.class);
+			Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+
+			// output pretty printed
+			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+
+			jaxbMarshaller.marshal(parsed, file);
+		} catch (Exception e) {
+			e.printStackTrace();
+			Assert.fail();
+		}
+		
+	}
+	
+	public void runQueriesAgainstSolrAndSaveResults(){
+		String path= "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/site_dl/";
+		String fileDb="ohsu-trec/trec9-train/ohsumed.87";		
 	}
 
 }
