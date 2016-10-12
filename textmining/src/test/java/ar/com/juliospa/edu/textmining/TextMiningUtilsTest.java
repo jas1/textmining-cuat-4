@@ -23,8 +23,10 @@ import org.junit.Test;
 
 import ar.com.juliospa.edu.textmining.domain.Doc;
 import ar.com.juliospa.edu.textmining.domain.DocCollection;
+import ar.com.juliospa.edu.textmining.domain.QueryStringCollection;
 import ar.com.juliospa.edu.textmining.utils.TextMiningUtils;
 import ar.com.juliospa.edu.textmining.utils.Trec87ParserUtil;
+import ar.com.juliospa.edu.textmining.utils.Trec87QueryNormalizer;
 
 public class TextMiningUtilsTest {
 
@@ -217,6 +219,103 @@ public class TextMiningUtilsTest {
 		Method setterField = clazz.getMethod(fieldSetterMethod, tipo );
 		XmlElement xmElem = setterField.getAnnotation(XmlElement.class);
 		return xmElem.name();
+	}
+	
+	@Test
+	public void standarizeQueriesToXml(){
+		String path= "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
+		String fileQueries="query.ohsu.1-63.xml";
+		String fileQueriesNorm="query.ohsu.1-63.norm.v2.xml";
+		
+		Trec87QueryNormalizer normalizer = new Trec87QueryNormalizer();
+		try {
+			QueryStringCollection parsed = normalizer.parseQueryColFromFilePath(path+fileQueries);
+			File file = new File(path+fileQueriesNorm);
+			JAXBContext jaxbContext = JAXBContext.newInstance(QueryStringCollection.class);
+			Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+
+			// output pretty printed
+			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+
+			jaxbMarshaller.marshal(parsed, file);
+		} catch (Exception e) {
+			e.printStackTrace();
+			Assert.fail();
+		}
+		
+	}
+	@Test
+	public void readQueriesFromXmlTuneado() {
+		String path= "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
+		String fileDb="query.ohsu.1-63.norm.v2.xml";
+		
+		try {
+			File file = new File(path+fileDb);
+			JAXBContext jaxbContext = JAXBContext.newInstance(QueryStringCollection.class);
+			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+			QueryStringCollection queryCol = (QueryStringCollection) jaxbUnmarshaller.unmarshal(file);
+			System.out.println(queryCol.getTops().get(0).getTitle());
+
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			Assert.fail();
+		}
+	}
+	
+	// la idea de esto es leer el archivo de queries.
+	@Test
+	public void queriesResultFile(){
+		
+	}
+	
+	/**
+	 * este es para correr la 1ra query contra solR
+	 */
+	@Test
+	public void runqQueryForTest(){
+		String path= "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
+		String fileDb="query.ohsu.1-63.norm.v2.xml";
+		
+		try {
+			File file = new File(path+fileDb);
+			JAXBContext jaxbContext = JAXBContext.newInstance(QueryStringCollection.class);
+			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+			QueryStringCollection queryCol = (QueryStringCollection) jaxbUnmarshaller.unmarshal(file);
+			
+			// armo el termino de la query
+			String testQuery = queryCol.getTops().get(0).getTitle() + " "+ queryCol.getTops().get(0).getDescription();
+			System.out.println(testQuery);
+			
+			// levanto instancia solR
+			SolrClient client = getClientInstance("tp1");
+//			ejecuto query solr
+			
+			SolrQuery query = new SolrQuery();
+			query.setQuery(testQuery);
+			//query.addFilterQuery("cat:electronics", "store:amazon.com");
+			//query.setFields("id", "price", "merchant", "cat", "store");
+			//query.setStart(0);
+			//query.set("defType", "edismax");
+
+			try {
+				QueryResponse response = client.query(query);
+				SolrDocumentList results = response.getResults();
+				System.out.println("se encontraron: "+results.getNumFound());
+				
+//				for (int i = 0; i < results.size(); ++i) {
+//					System.out.println(results.get(i));
+//				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				Assert.fail();
+			}
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			Assert.fail();
+		}
 	}
 
 }
