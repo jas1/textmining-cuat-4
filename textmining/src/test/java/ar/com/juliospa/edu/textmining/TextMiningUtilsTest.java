@@ -1,10 +1,14 @@
 package ar.com.juliospa.edu.textmining;
 
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.nio.file.Path;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -14,9 +18,11 @@ import javax.xml.bind.annotation.XmlElement;
 
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.response.UpdateResponse;
+import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
 import org.junit.Assert;
@@ -24,10 +30,12 @@ import org.junit.Test;
 
 import ar.com.juliospa.edu.textmining.domain.Doc;
 import ar.com.juliospa.edu.textmining.domain.DocCollection;
+import ar.com.juliospa.edu.textmining.domain.ExpectedResult;
 import ar.com.juliospa.edu.textmining.domain.QueryStringCollection;
 import ar.com.juliospa.edu.textmining.utils.TextMiningUtils;
 import ar.com.juliospa.edu.textmining.utils.Trec87ParserUtil;
 import ar.com.juliospa.edu.textmining.utils.Trec87QueryNormalizer;
+import ar.com.juliospa.edu.textmining.utils.Trec87ResultParser;
 
 public class TextMiningUtilsTest {
 
@@ -128,8 +136,7 @@ public class TextMiningUtilsTest {
 			String fileDb="ohsu-trec/trec9-train/ohsumed.87";
 			String fileOut="ohsumed.87.output.xml";
 			
-			Trec87ParserUtil parser = new Trec87ParserUtil();
-			DocCollection parsed = parser.parseDocCollectionFromFilePath(path+fileDb);
+			DocCollection parsed = Trec87ParserUtil.parseDocCollectionFromFilePath(path+fileDb);
 			
 			File file = new File(path+fileOut);
 			JAXBContext jaxbContext = JAXBContext.newInstance(DocCollection.class);
@@ -179,8 +186,7 @@ public class TextMiningUtilsTest {
 			//String fileOut="ohsumed.87.output.xml";
 			
 			// parser
-			Trec87ParserUtil parser = new Trec87ParserUtil();
-			DocCollection parsed = parser.parseDocCollectionFromFilePath(path+fileDb);
+			DocCollection parsed = Trec87ParserUtil.parseDocCollectionFromFilePath(path+fileDb);
 			// conexion con el solR ( tiene que estar levantado ) 
 			SolrClient client = getClientInstance("tp1");
 
@@ -251,10 +257,7 @@ public class TextMiningUtilsTest {
 		String fileDb="query.ohsu.1-63.norm.v2.xml";
 		
 		try {
-			File file = new File(path+fileDb);
-			JAXBContext jaxbContext = JAXBContext.newInstance(QueryStringCollection.class);
-			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-			QueryStringCollection queryCol = (QueryStringCollection) jaxbUnmarshaller.unmarshal(file);
+			QueryStringCollection queryCol = parseQueries(path, fileDb);
 			System.out.println(queryCol.getTops().get(0).getTitle());
 
 			
@@ -267,9 +270,21 @@ public class TextMiningUtilsTest {
 	// la idea de esto es leer el archivo de queries.
 	@Test
 	public void queriesResultFile(){
-		
+		String path= "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
+		String fileResult="qrels.ohsu.batch.87";
+		try {
+			List<ExpectedResult> result = Trec87ResultParser.parseExpectedResults(path+fileResult);
+			System.out.println(result.size());			
+
+			Trec87ResultParser.expectedQuantities(result); 
+						
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Assert.fail();
+		}
 	}
-	
+
 	/**
 	 * este es para correr la 1ra query contra solR
 	 */
@@ -279,10 +294,7 @@ public class TextMiningUtilsTest {
 		String fileDb="query.ohsu.1-63.norm.v2.xml";
 		
 		try {
-			File file = new File(path+fileDb);
-			JAXBContext jaxbContext = JAXBContext.newInstance(QueryStringCollection.class);
-			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-			QueryStringCollection queryCol = (QueryStringCollection) jaxbUnmarshaller.unmarshal(file);
+			QueryStringCollection queryCol = parseQueries(path, fileDb);
 			
 			// armo el termino de la query
 			String testQuery = queryCol.getTops().get(0).getTitle() + " "+ queryCol.getTops().get(0).getDescription();
@@ -303,10 +315,6 @@ public class TextMiningUtilsTest {
 				QueryResponse response = client.query(query);
 				SolrDocumentList results = response.getResults();
 				System.out.println("se encontraron: "+results.getNumFound());
-				
-//				for (int i = 0; i < results.size(); ++i) {
-//					System.out.println(results.get(i));
-//				}
 			} catch (Exception e) {
 				e.printStackTrace();
 				Assert.fail();
@@ -317,6 +325,119 @@ public class TextMiningUtilsTest {
 			e.printStackTrace();
 			Assert.fail();
 		}
+	}
+	/**
+	 * para tener el listado de queries directo desde el xml 
+	 * @param path
+	 * @param fileDb
+	 * @return
+	 * @throws JAXBException
+	 */
+	private QueryStringCollection parseQueries(String path, String fileDb) throws JAXBException {
+		File file = new File(path+fileDb);
+		JAXBContext jaxbContext = JAXBContext.newInstance(QueryStringCollection.class);
+		Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+		QueryStringCollection queryCol = (QueryStringCollection) jaxbUnmarshaller.unmarshal(file);
+		return queryCol;
+	}
+	
+	/**
+	 * para ejecutar la query analizar el resultado vs los resultados esperados
+	 */
+	@Test
+	public void compareQueryResultVsQueryExpected() {
+		String pathQueries= "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
+		String fileQueries="query.ohsu.1-63.norm.v2.xml";
+		String pathExpected= "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
+		String fileExpected="qrels.ohsu.batch.87";
+		try {
+			QueryStringCollection queries = parseQueries(pathQueries,fileQueries);
+			List<ExpectedResult> expectedResult = Trec87ResultParser.parseExpectedResults(pathExpected+fileExpected);
+			int queryNumber = 0;
+			
+			QueryResponse response = executeQueryAgainstSolR(queries, queryNumber);
+			SolrDocumentList results = response.getResults();
+			
+			List<ExpectedResult> expectedResultForQuery = getExpectedResultsForQueryNumber(queries, expectedResult,queryNumber);
+			
+			Map<Integer, Integer> contieneDocumento = mapForRelevanceBuild(results, expectedResultForQuery);
+			// filtro por los que dejaron diferente de 0
+			Long relevantesObtenidos = contieneDocumento.entrySet().stream().filter(ent-> ent.getValue()!=0).count();
+			
+			System.out.println("total ="+results.getNumFound());
+			System.out.println("total relevantes="+expectedResultForQuery.size());
+			System.out.println("difference(ex-found)=" + (expectedResultForQuery.size() - results.getNumFound()));
+			System.out.println("relevantes obtenidos="+relevantesObtenidos);
+
+			
+			// precision
+//			P = RELEVANTES OBTENIDOS vs TOTAL OBTENIDOS
+			double precision = ((double)relevantesObtenidos) / results.getNumFound();
+			System.out.println("P = RELEVANTES OBTENIDOS / TOTAL OBTENIDOS");
+//			System.out.println("precision ="+ new BigDecimal(precision).toPlainString());
+	        System.out.printf("%.9f", precision);
+	        System.out.println();
+
+			// recall 
+//			R = relevantes obtenidos vs TOTAL RELAVANTES PARA LA QUERY 
+			double recall = ((double)relevantesObtenidos) / expectedResultForQuery.size();
+			System.out.println("R = relevantes obtenidos / TOTAL RELAVANTES PARA LA QUERY ");
+//			System.out.println("recall ="+ new BigDecimal(recall).toPlainString());
+	        System.out.printf("%.9f", recall);
+	        System.out.println();
+			System.out.println("relevant id"+" - "+"relevance match ( 0 , no match) ");
+			contieneDocumento.entrySet().forEach(ent -> System.out.println(ent.getKey()+" - "+ent.getValue()));
+			
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
+	private Map<Integer, Integer> mapForRelevanceBuild(SolrDocumentList results,
+			List<ExpectedResult> expectedResultForQuery) {
+		Map<Integer,Integer> contieneDocumento = new HashMap<>();
+		// recorro expected, y me fijo por cada 1, si encuentro el resultado en los resultados.
+		expectedResultForQuery.forEach(exp -> results.forEach(resu -> populateMapContainsDocs(exp,resu,contieneDocumento)));
+		return contieneDocumento;
+	}
+	// funcion del loop : recorro expected, y me fijo por cada 1, si encuentro el resultado en los resultados.
+	private void populateMapContainsDocs (ExpectedResult exp ,SolrDocument resu,Map<Integer,Integer> resultMap){
+		Integer currentKey = (Integer)resu.get("DOCNO");
+		
+		Integer currentValue = resultMap.get(currentKey);
+		// si venia null lo incializo, sino me quedo con el valor que venia.
+		if (currentValue == null ) {
+			currentValue=0;
+		}
+		// si los docs son iguales actualizo que se encontro, con el valor de la relevancia esperada
+		if (resu.get("DOCNO").equals(exp.getDocumentId())) {
+			// actualizo current value
+			currentValue= exp.getRelevance();
+		}
+		// guardo el valor actualizado
+		resultMap.put(currentKey,currentValue);
+	}
+
+	private List<ExpectedResult> getExpectedResultsForQueryNumber(QueryStringCollection queries,
+			List<ExpectedResult> expectedResult, int queryNumber) {
+		List<ExpectedResult> expectedResultForQuery = expectedResult.stream()
+			.filter(er -> er.getQueryId().equals(queries.getTops().get(queryNumber).getNumber()))
+			.collect(Collectors.toList());
+		return expectedResultForQuery;
+	}
+
+	private QueryResponse executeQueryAgainstSolR(QueryStringCollection queries, int queryNumber)
+			throws SolrServerException, IOException {
+		String testQuery = queries.getTops().get(queryNumber).getTitle() +" "+ queries.getTops().get(queryNumber).getDescription();
+		SolrClient client = getClientInstance("tp1");
+		SolrQuery query = new SolrQuery();
+		query.setQuery(testQuery);
+		QueryResponse response = client.query(query);
+		
+		return response;
 	}
 
 }

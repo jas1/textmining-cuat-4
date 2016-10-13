@@ -8,14 +8,14 @@ import ar.com.juliospa.edu.textmining.domain.DocCollection;
 
 public class Trec87ParserUtil {
 
-	private final String I = ".I";
-	private final String U = ".U";
-	private final String M = ".M";
-	private final String T = ".T";
-	private final String P = ".P";
-	private final String W = ".W";
-	private final String A = ".A";
-	private final String S = ".S";
+	private static final String I = ".I";
+	private static final String U = ".U";
+	private static final String M = ".M";
+	private static final String T = ".T";
+	private static final String P = ".P";
+	private static final String W = ".W";
+	private static final String A = ".A";
+	private static final String S = ".S";
 	
 	// ENTRA: 
 //	.I      sequential identifier (important note: documents should be processed in this order)
@@ -41,7 +41,7 @@ public class Trec87ParserUtil {
 	
 	
 	
-	public DocCollection parseDocCollectionFromFilePath(String filePaht) throws Exception {
+	public static DocCollection parseDocCollectionFromFilePath(String filePaht) throws Exception {
 		File file = new File(filePaht);
 		Scanner input = new Scanner(file);
 		DocCollection result = new DocCollection();
@@ -103,13 +103,18 @@ public class Trec87ParserUtil {
 					currentBlockAcum+=line;
 				}
 			}
+			if (cantDocsprocessed % 100 == 0) {
+				System.out.println(cantDocsprocessed);
+			}
 		}
+		System.out.println(cantDocsprocessed);
 		// cierro el ultimo bloque
 		closeEndingBLock(currentBlock,currentDoc,currentBlockAcum);
 		// agrego el ultimo doc.
 		result.getDocuments().add(currentDoc);
 		// cierro el input
 		input.close();
+
 		return result;
 	}
 
@@ -122,7 +127,7 @@ public class Trec87ParserUtil {
 	 * @param currentBlockAcum lo acumulado hasta el momento que va para el closing block
 	 * @throws Exception en case its not a value from the inputs
 	 */
-	private void closeEndingBLock(String currentBlock, Doc currentDoc, String currentBlockAcum) throws Exception {
+	private static void closeEndingBLock(String currentBlock, Doc currentDoc, String currentBlockAcum) throws Exception {
 //		.U      MEDLINE identifier (UI) (<DOCNO> used for relevance judgements)
 //		.M      Human-assigned MeSH terms (MH)
 //		.T      Title (TI)
@@ -151,7 +156,7 @@ public class Trec87ParserUtil {
 		}
 	}
 
-	private Doc parseI(String line) {
+	private static Doc parseI(String line) {
 		Doc ret = new Doc();
 		ret.setId(Integer.parseInt(line.split(" ")[1]));
 		return ret;

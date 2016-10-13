@@ -65,7 +65,7 @@ public class Trec87QueryNormalizer {
         tidy.parse(is, fos);
 	}
 	
-	public QueryStringCollection parseQueryColFromFilePath(String filePaht) throws Exception {
+	public static QueryStringCollection parseQueryColFromFilePath(String filePaht) throws Exception {
 		File file = new File(filePaht);
 		Scanner input = new Scanner(file);
 		QueryStringCollection result = new QueryStringCollection();
