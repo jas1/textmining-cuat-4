@@ -2,27 +2,20 @@ package ar.com.juliospa.edu.textmining;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Method;
-import java.math.BigDecimal;
 import java.nio.file.Path;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.PropertyException;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.bind.annotation.XmlElement;
 
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.response.UpdateResponse;
-import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
 import org.junit.Assert;
@@ -31,7 +24,11 @@ import org.junit.Test;
 import ar.com.juliospa.edu.textmining.domain.Doc;
 import ar.com.juliospa.edu.textmining.domain.DocCollection;
 import ar.com.juliospa.edu.textmining.domain.ExpectedResult;
+import ar.com.juliospa.edu.textmining.domain.Measures;
+import ar.com.juliospa.edu.textmining.domain.MeasuresContainer;
+import ar.com.juliospa.edu.textmining.domain.QueryString;
 import ar.com.juliospa.edu.textmining.domain.QueryStringCollection;
+import ar.com.juliospa.edu.textmining.utils.SolRUtils;
 import ar.com.juliospa.edu.textmining.utils.TextMiningUtils;
 import ar.com.juliospa.edu.textmining.utils.Trec87ParserUtil;
 import ar.com.juliospa.edu.textmining.utils.Trec87QueryNormalizer;
@@ -52,7 +49,7 @@ public class TextMiningUtilsTest {
 	 */
 	@Test
 	public void querySolrInstance() {
-		SolrClient client = getClientInstance("lau_normativa");
+		SolrClient client = SolRUtils.getClientInstance("lau_normativa");
 
 		String queryStr ="mendoza";
 
@@ -74,18 +71,12 @@ public class TextMiningUtilsTest {
 		}
 	}
 
-	private SolrClient getClientInstance(String indexName) {
-		String urlString = "http://localhost:8983/solr/"+indexName;
-		SolrClient client = new HttpSolrClient.Builder(urlString).build();
-		return client;
-	}
-	
 	/**
 	 * para cargar docs
 	 */
 	@Test
 	public void solrLoadDocs() {
-		SolrClient client = getClientInstance("gettingstarted");
+		SolrClient client = SolRUtils.getClientInstance("gettingstarted");
 
 		try {
 			SolrInputDocument document = new SolrInputDocument();
@@ -162,7 +153,7 @@ public class TextMiningUtilsTest {
 	@Test
 	public void deleteDocumentsFromCollection() {
 		
-		SolrClient client = getClientInstance("tp1");
+		SolrClient client = SolRUtils.getClientInstance("tp1");
 		try {
 			// esta comentado porque borra todo 
 			//client.deleteByQuery("*:*");
@@ -188,7 +179,7 @@ public class TextMiningUtilsTest {
 			// parser
 			DocCollection parsed = Trec87ParserUtil.parseDocCollectionFromFilePath(path+fileDb);
 			// conexion con el solR ( tiene que estar levantado ) 
-			SolrClient client = getClientInstance("tp1");
+			SolrClient client = SolRUtils.getClientInstance("tp1");
 
 			// para cada doc , vamos a crear un solr 
 			for (Doc doc : parsed.getDocuments()) {
@@ -197,14 +188,14 @@ public class TextMiningUtilsTest {
 				// antes de hacer esto hay que dar de alta los campos
 				// agregar los campos que uso para indexar a mano en el solR admin
 				// solar admin > seleccionar la coleccion > schema > add field
-				document.addField(getFieldNameForXMl("Author",String.class,Doc.class), doc.getAuthor());
-				document.addField(getFieldNameForXMl("DocAbstract",String.class,Doc.class), doc.getDocAbstract());
-				document.addField(getFieldNameForXMl("Docno",Integer.class,Doc.class), doc.getDocno());
-				document.addField(getFieldNameForXMl("Id",Integer.class,Doc.class), doc.getId());
-				document.addField(getFieldNameForXMl("Mesh",String.class,Doc.class), doc.getMesh());
-				document.addField(getFieldNameForXMl("PublicationType",String.class,Doc.class), doc.getPublicationType());
-				document.addField(getFieldNameForXMl("Source",String.class,Doc.class), doc.getSource());
-				document.addField(getFieldNameForXMl("Title",String.class,Doc.class), doc.getTitle());
+				document.addField(Doc.getFieldNameForXMl("Author",String.class,Doc.class), doc.getAuthor());
+				document.addField(Doc.getFieldNameForXMl("DocAbstract",String.class,Doc.class), doc.getDocAbstract());
+				document.addField(Doc.getFieldNameForXMl("Docno",Integer.class,Doc.class), doc.getDocno());
+				document.addField(Doc.getFieldNameForXMl("Id",Integer.class,Doc.class), doc.getId());
+				document.addField(Doc.getFieldNameForXMl("Mesh",String.class,Doc.class), doc.getMesh());
+				document.addField(Doc.getFieldNameForXMl("PublicationType",String.class,Doc.class), doc.getPublicationType());
+				document.addField(Doc.getFieldNameForXMl("Source",String.class,Doc.class), doc.getSource());
+				document.addField(Doc.getFieldNameForXMl("Title",String.class,Doc.class), doc.getTitle());
 				
 				// lo agrego al response
 				UpdateResponse response = client.add(document);
@@ -219,13 +210,6 @@ public class TextMiningUtilsTest {
 		}
 		Assert.assertTrue(true);
 		
-	}
-	
-	public String getFieldNameForXMl(String domainName,Class<?> tipo,Class<?> clazz) throws NoSuchMethodException, SecurityException {
-		String fieldSetterMethod = "set"+domainName;
-		Method setterField = clazz.getMethod(fieldSetterMethod, tipo );
-		XmlElement xmElem = setterField.getAnnotation(XmlElement.class);
-		return xmElem.name();
 	}
 	
 	@Test
@@ -257,7 +241,7 @@ public class TextMiningUtilsTest {
 		String fileDb="query.ohsu.1-63.norm.v2.xml";
 		
 		try {
-			QueryStringCollection queryCol = parseQueries(path, fileDb);
+			QueryStringCollection queryCol = Trec87QueryNormalizer.parseQueries(path, fileDb);
 			System.out.println(queryCol.getTops().get(0).getTitle());
 
 			
@@ -294,14 +278,14 @@ public class TextMiningUtilsTest {
 		String fileDb="query.ohsu.1-63.norm.v2.xml";
 		
 		try {
-			QueryStringCollection queryCol = parseQueries(path, fileDb);
+			QueryStringCollection queryCol = Trec87QueryNormalizer.parseQueries(path, fileDb);
 			
 			// armo el termino de la query
 			String testQuery = queryCol.getTops().get(0).getTitle() + " "+ queryCol.getTops().get(0).getDescription();
 			System.out.println(testQuery);
 			
 			// levanto instancia solR
-			SolrClient client = getClientInstance("tp1");
+			SolrClient client = SolRUtils.getClientInstance("tp1");
 //			ejecuto query solr
 			
 			SolrQuery query = new SolrQuery();
@@ -327,21 +311,6 @@ public class TextMiningUtilsTest {
 		}
 	}
 	/**
-	 * para tener el listado de queries directo desde el xml 
-	 * @param path
-	 * @param fileDb
-	 * @return
-	 * @throws JAXBException
-	 */
-	private QueryStringCollection parseQueries(String path, String fileDb) throws JAXBException {
-		File file = new File(path+fileDb);
-		JAXBContext jaxbContext = JAXBContext.newInstance(QueryStringCollection.class);
-		Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-		QueryStringCollection queryCol = (QueryStringCollection) jaxbUnmarshaller.unmarshal(file);
-		return queryCol;
-	}
-	
-	/**
 	 * para ejecutar la query analizar el resultado vs los resultados esperados
 	 */
 	@Test
@@ -350,94 +319,70 @@ public class TextMiningUtilsTest {
 		String fileQueries="query.ohsu.1-63.norm.v2.xml";
 		String pathExpected= "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
 		String fileExpected="qrels.ohsu.batch.87";
+		
+		String pathOutMeasures= "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
+		String fileOutMeasures="jaspa.query1.measures.xml";
+		
+		int queryNumber = 0;
+		
 		try {
-			QueryStringCollection queries = parseQueries(pathQueries,fileQueries);
+			QueryStringCollection queries = Trec87QueryNormalizer.parseQueries(pathQueries,fileQueries);
 			List<ExpectedResult> expectedResult = Trec87ResultParser.parseExpectedResults(pathExpected+fileExpected);
-			int queryNumber = 0;
 			
-			QueryResponse response = executeQueryAgainstSolR(queries, queryNumber);
+			
+			QueryResponse response = SolRUtils.executeQueryAgainstSolR(queries, queryNumber);
 			SolrDocumentList results = response.getResults();
 			
-			List<ExpectedResult> expectedResultForQuery = getExpectedResultsForQueryNumber(queries, expectedResult,queryNumber);
+			List<ExpectedResult> expectedResultForQuery = SolRUtils.getExpectedResultsForQueryNumber(queries, expectedResult,queryNumber);
 			
-			Map<Integer, Integer> contieneDocumento = mapForRelevanceBuild(results, expectedResultForQuery);
-			// filtro por los que dejaron diferente de 0
-			Long relevantesObtenidos = contieneDocumento.entrySet().stream().filter(ent-> ent.getValue()!=0).count();
+			Measures measures = new Measures(queries.getTops().get(queryNumber), results, expectedResultForQuery);
+			measures.showMeasures();
+			Class<MeasuresContainer> classToMarshal = MeasuresContainer.class;
+			MeasuresContainer container = new MeasuresContainer();
+			container.getList().add(measures);
 			
-			System.out.println("total ="+results.getNumFound());
-			System.out.println("total relevantes="+expectedResultForQuery.size());
-			System.out.println("difference(ex-found)=" + (expectedResultForQuery.size() - results.getNumFound()));
-			System.out.println("relevantes obtenidos="+relevantesObtenidos);
-
-			
-			// precision
-//			P = RELEVANTES OBTENIDOS vs TOTAL OBTENIDOS
-			double precision = ((double)relevantesObtenidos) / results.getNumFound();
-			System.out.println("P = RELEVANTES OBTENIDOS / TOTAL OBTENIDOS");
-//			System.out.println("precision ="+ new BigDecimal(precision).toPlainString());
-	        System.out.printf("%.9f", precision);
-	        System.out.println();
-
-			// recall 
-//			R = relevantes obtenidos vs TOTAL RELAVANTES PARA LA QUERY 
-			double recall = ((double)relevantesObtenidos) / expectedResultForQuery.size();
-			System.out.println("R = relevantes obtenidos / TOTAL RELAVANTES PARA LA QUERY ");
-//			System.out.println("recall ="+ new BigDecimal(recall).toPlainString());
-	        System.out.printf("%.9f", recall);
-	        System.out.println();
-			System.out.println("relevant id"+" - "+"relevance match ( 0 , no match) ");
-			contieneDocumento.entrySet().forEach(ent -> System.out.println(ent.getKey()+" - "+ent.getValue()));
+			TextMiningUtils.objectsToXml(pathOutMeasures, fileOutMeasures, container, classToMarshal);
 			
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 	}
 
-	private Map<Integer, Integer> mapForRelevanceBuild(SolrDocumentList results,
-			List<ExpectedResult> expectedResultForQuery) {
-		Map<Integer,Integer> contieneDocumento = new HashMap<>();
-		// recorro expected, y me fijo por cada 1, si encuentro el resultado en los resultados.
-		expectedResultForQuery.forEach(exp -> results.forEach(resu -> populateMapContainsDocs(exp,resu,contieneDocumento)));
-		return contieneDocumento;
-	}
-	// funcion del loop : recorro expected, y me fijo por cada 1, si encuentro el resultado en los resultados.
-	private void populateMapContainsDocs (ExpectedResult exp ,SolrDocument resu,Map<Integer,Integer> resultMap){
-		Integer currentKey = (Integer)resu.get("DOCNO");
+	@Test
+	public void allQueryDatasetEval() {
+		String pathQueries= "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
+		String fileQueries="query.ohsu.1-63.norm.v2.xml";
+		String pathExpected= "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
+		String fileExpected="qrels.ohsu.batch.87";
 		
-		Integer currentValue = resultMap.get(currentKey);
-		// si venia null lo incializo, sino me quedo con el valor que venia.
-		if (currentValue == null ) {
-			currentValue=0;
+		String pathOutMeasures= "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
+		String fileOutMeasures="jaspa.queries.measures.xml";
+		
+		try {
+			QueryStringCollection queries = Trec87QueryNormalizer.parseQueries(pathQueries,fileQueries);
+			List<ExpectedResult> expectedResult = Trec87ResultParser.parseExpectedResults(pathExpected+fileExpected);
+			
+			MeasuresContainer container = new MeasuresContainer();
+			
+			for (QueryString query : queries.getTops()) {
+				QueryResponse response = SolRUtils.executeQueryAgainstSolR(query);
+				SolrDocumentList results = response.getResults();
+				List<ExpectedResult> expectedResultForQuery = SolRUtils.getExpectedResultsForQueryNumber(query, expectedResult);
+				Measures measures = new Measures(query, results, expectedResultForQuery);
+				container.getList().add(measures);
+			}
+
+			Class<MeasuresContainer> classToMarshal = MeasuresContainer.class;		
+			TextMiningUtils.objectsToXml(pathOutMeasures, fileOutMeasures, container, classToMarshal);
+		} catch (Exception e) {
+			e.printStackTrace();
+			Assert.fail();
 		}
-		// si los docs son iguales actualizo que se encontro, con el valor de la relevancia esperada
-		if (resu.get("DOCNO").equals(exp.getDocumentId())) {
-			// actualizo current value
-			currentValue= exp.getRelevance();
-		}
-		// guardo el valor actualizado
-		resultMap.put(currentKey,currentValue);
-	}
-
-	private List<ExpectedResult> getExpectedResultsForQueryNumber(QueryStringCollection queries,
-			List<ExpectedResult> expectedResult, int queryNumber) {
-		List<ExpectedResult> expectedResultForQuery = expectedResult.stream()
-			.filter(er -> er.getQueryId().equals(queries.getTops().get(queryNumber).getNumber()))
-			.collect(Collectors.toList());
-		return expectedResultForQuery;
-	}
-
-	private QueryResponse executeQueryAgainstSolR(QueryStringCollection queries, int queryNumber)
-			throws SolrServerException, IOException {
-		String testQuery = queries.getTops().get(queryNumber).getTitle() +" "+ queries.getTops().get(queryNumber).getDescription();
-		SolrClient client = getClientInstance("tp1");
-		SolrQuery query = new SolrQuery();
-		query.setQuery(testQuery);
-		QueryResponse response = client.query(query);
 		
-		return response;
 	}
-
+	
+	//http://stackoverflow.com/questions/32372647/solr-stemming-words-using-solr
+	
 }

@@ -7,6 +7,10 @@ import java.io.FileOutputStream;
 import java.util.Properties;
 import java.util.Scanner;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+
 import org.w3c.tidy.Tidy;
 
 import ar.com.juliospa.edu.textmining.domain.QueryString;
@@ -65,6 +69,21 @@ public class Trec87QueryNormalizer {
         tidy.parse(is, fos);
 	}
 	
+	/**
+	 * para tener el listado de queries directo desde el xml 
+	 * @param path
+	 * @param fileDb
+	 * @return
+	 * @throws JAXBException
+	 */
+	public static QueryStringCollection parseQueries(String path, String fileDb) throws JAXBException {
+		File file = new File(path+fileDb);
+		JAXBContext jaxbContext = JAXBContext.newInstance(QueryStringCollection.class);
+		Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+		QueryStringCollection queryCol = (QueryStringCollection) jaxbUnmarshaller.unmarshal(file);
+		return queryCol;
+	}
+
 	public static QueryStringCollection parseQueryColFromFilePath(String filePaht) throws Exception {
 		File file = new File(filePaht);
 		Scanner input = new Scanner(file);

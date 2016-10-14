@@ -1,5 +1,7 @@
 package ar.com.juliospa.edu.textmining.domain;
 
+import java.lang.reflect.Method;
+
 import javax.xml.bind.annotation.XmlElement;
 
 
@@ -68,6 +70,12 @@ public class Doc {
 	@XmlElement(name="AUTHOR")
 	public void setAuthor(String author) {
 		this.author = author;
+	}
+	public static String getFieldNameForXMl(String domainName,Class<?> tipo,Class<?> clazz) throws NoSuchMethodException, SecurityException {
+		String fieldSetterMethod = "set"+domainName;
+		Method setterField = clazz.getMethod(fieldSetterMethod, tipo );
+		XmlElement xmElem = setterField.getAnnotation(XmlElement.class);
+		return xmElem.name();
 	}
 
 //	<COLLECTION>@XmlRootElement

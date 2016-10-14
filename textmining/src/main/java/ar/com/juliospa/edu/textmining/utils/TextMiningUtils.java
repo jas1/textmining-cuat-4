@@ -1,5 +1,6 @@
 package ar.com.juliospa.edu.textmining.utils;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
@@ -9,6 +10,11 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.PropertyException;
 
 public class TextMiningUtils {
 
@@ -33,6 +39,21 @@ public class TextMiningUtils {
 		      e.printStackTrace();
 		 }
 		return files;
+	}
+
+	public static void objectsToXml(String pathOutMeasures, String fileOutMeasures, Object measures,
+			Class<?> classToMarshal) throws JAXBException, PropertyException {
+		// guardar measures en xml
+		File file = new File(pathOutMeasures+fileOutMeasures);
+	
+		JAXBContext jaxbContext = JAXBContext.newInstance(classToMarshal);
+		Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+	
+		// output pretty printed
+		jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+	
+		jaxbMarshaller.marshal(measures, file);
+		System.out.println(file.getAbsoluteFile());
 	}
 	
 }
