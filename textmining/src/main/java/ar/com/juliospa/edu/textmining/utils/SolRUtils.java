@@ -53,5 +53,16 @@ public class SolRUtils {
 		
 		return response;
 	}
+	
+	public static QueryResponse executeQueryAgainstSolRWithStemmer(QueryString query) throws SolrServerException, IOException {
+		String testQuery = query.getTitle() +" "+ query.getDescription();
+//		String stemedQUery = org.apache.lucene.analysis.en.PorterStemmer.stem(testQuery);
+		SolrClient client = getClientInstance("tp1");
+		SolrQuery solRquery = new SolrQuery();
+		solRquery.setQuery(TextMiningUtils.stemSentence(testQuery));
+		QueryResponse response = client.query(solRquery);
+		
+		return response;
+	}
 
 }

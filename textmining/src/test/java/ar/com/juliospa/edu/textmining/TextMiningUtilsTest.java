@@ -8,7 +8,6 @@ import java.util.List;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-import javax.xml.bind.PropertyException;
 import javax.xml.bind.Unmarshaller;
 
 import org.apache.solr.client.solrj.SolrClient;
@@ -383,6 +382,107 @@ public class TextMiningUtilsTest {
 		
 	}
 	
-	//http://stackoverflow.com/questions/32372647/solr-stemming-words-using-solr
 	
+	
+	//http://stackoverflow.com/questions/32372647/solr-stemming-words-using-solr
+	@Test
+	public void stemmer() {
+		String pathQueries= "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
+		String fileQueries="query.ohsu.1-63.norm.v2.xml";
+		String pathExpected= "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
+		String fileExpected="qrels.ohsu.batch.87";
+		
+		String pathOutMeasures= "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
+		String fileOutMeasures="jaspa.query1.measures.xml";
+		
+		int queryNumber = 0;
+		
+		try {
+			QueryStringCollection queries = Trec87QueryNormalizer.parseQueries(pathQueries,fileQueries);
+			List<ExpectedResult> expectedResult = Trec87ResultParser.parseExpectedResults(pathExpected+fileExpected);
+			
+			
+			QueryResponse response = SolRUtils.executeQueryAgainstSolRWithStemmer(queries.getTops().get(queryNumber));
+			SolrDocumentList results = response.getResults();
+			
+			List<ExpectedResult> expectedResultForQuery = SolRUtils.getExpectedResultsForQueryNumber(queries, expectedResult,queryNumber);
+			
+			Measures measures = new Measures(queries.getTops().get(queryNumber), results, expectedResultForQuery);
+			measures.showMeasures();
+
+			//TextMiningUtils.objectsToXml(pathOutMeasures, fileOutMeasures, container, classToMarshal);
+			
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void testStemmer() {
+		String tmp = "60 year old menopausal woman without hormone replacement therapy anticardiolipin and lupus anticoagulants, pathophysiology, epidemiology, complications";
+
+		TextMiningUtils.stemSentence(tmp);
+	}
+	@Test
+	public void deleteAllFromStemmerTp1() {
+		try {
+			SolrClient client = SolRUtils.getClientInstance("tp1-stemmer");
+			client.deleteByQuery("*:*");
+		} catch (Exception e) {
+			Assert.fail();
+		}
+	}
+	
+	@Test
+	public void oshumedFormatToSolrIndexStemmer() {
+		try {
+			// path donde este el archivo original
+			String path= "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/site_dl/";
+			String fileDb="ohsu-trec/trec9-train/ohsumed.87";
+			//String fileOut="ohsumed.87.output.xml";
+			
+			// parser
+			DocCollection parsed = Trec87ParserUtil.parseDocCollectionFromFilePath(path+fileDb);
+			// conexion con el solR ( tiene que estar levantado ) 
+			SolrClient client = SolRUtils.getClientInstance("tp1-stemmer");
+
+			// para cada doc , vamos a crear un solr 
+			for (Doc doc : parsed.getDocuments()) {
+				SolrInputDocument document = new SolrInputDocument();
+				// recorro todos los fields de la clase y los agrego al documento solr
+				// antes de hacer esto hay que dar de alta los campos
+				// agregar los campos que uso para indexar a mano en el solR admin
+				// solar admin > seleccionar la coleccion > schema > add field
+				document.addField(Doc.getFieldNameForXMl("Author",String.class,Doc.class), doc.getAuthor()==null? doc.getAuthor():doc.getAuthor().toLowerCase());
+				document.addField(Doc.getFieldNameForXMl("DocAbstract",String.class,Doc.class), doc.getDocAbstract()==null? doc.getDocAbstract():TextMiningUtils.stemSentence(doc.getDocAbstract().toLowerCase()));
+				document.addField(Doc.getFieldNameForXMl("Docno",Integer.class,Doc.class), doc.getDocno());
+				document.addField(Doc.getFieldNameForXMl("Id",Integer.class,Doc.class), doc.getId());
+				document.addField(Doc.getFieldNameForXMl("Mesh",String.class,Doc.class), doc.getMesh()==null? doc.getMesh():TextMiningUtils.stemSentence(doc.getMesh().toLowerCase()));
+				document.addField(Doc.getFieldNameForXMl("PublicationType",String.class,Doc.class), doc.getPublicationType()==null? doc.getPublicationType():doc.getPublicationType().toLowerCase());
+				document.addField(Doc.getFieldNameForXMl("Source",String.class,Doc.class), doc.getSource()==null? doc.getSource():doc.getSource().toLowerCase());
+				document.addField(Doc.getFieldNameForXMl("Title",String.class,Doc.class), doc.getTitle()==null? doc.getTitle():TextMiningUtils.stemSentence(doc.getTitle().toLowerCase()));
+				
+				// lo agrego al response
+				UpdateResponse response = client.add(document);
+				System.out.println(response.getStatus());
+				// comiteo al server
+				client.commit();
+			}			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			try {
+//				SolrClient client = SolRUtils.getClientInstance("tp1-stemmer");
+//				client.deleteByQuery("*:*");
+			} catch (Exception e1) {
+				e1.printStackTrace();
+				Assert.fail();
+			}
+			Assert.fail();
+		}
+		Assert.assertTrue(true);
+		
+	}
 }

@@ -9,12 +9,15 @@ import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.PropertyException;
+
+import edu.stanford.nlp.process.Stemmer;
 
 public class TextMiningUtils {
 
@@ -54,6 +57,17 @@ public class TextMiningUtils {
 	
 		jaxbMarshaller.marshal(measures, file);
 		System.out.println(file.getAbsoluteFile());
+	}
+
+	public static String stemSentence(String tmp) {
+		if (tmp!=null && tmp.length()>0) {
+			Stemmer asd = new Stemmer();		
+			String[] tmplist = tmp.split(" ");
+			List<String> acum = new ArrayList<>();
+			Arrays.asList(tmplist).stream().forEach(str -> acum.add(asd.stem(str)));
+			return String.join(" ", acum);	
+		}
+		return tmp;
 	}
 	
 }
