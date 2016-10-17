@@ -38,15 +38,15 @@ public class SolRUtils {
 		return expectedResultForQuery;
 	}
 	
-	public static QueryResponse executeQueryAgainstSolR(QueryStringCollection queries, int queryNumber)
+	public static QueryResponse executeQueryAgainstSolR(QueryStringCollection queries, int queryNumber, String indexName)
 			throws SolrServerException, IOException {
 		
-		return executeQueryAgainstSolR(queries.getTops().get(queryNumber));
+		return executeQueryAgainstSolR(queries.getTops().get(queryNumber), indexName);
 	}
 
-	public static QueryResponse executeQueryAgainstSolR(QueryString query) throws SolrServerException, IOException {
+	public static QueryResponse executeQueryAgainstSolR(QueryString query, String indexName) throws SolrServerException, IOException {
 		String testQuery = query.getTitle() +" "+ query.getDescription();
-		SolrClient client = getClientInstance("tp1");
+		SolrClient client = getClientInstance(indexName);
 		SolrQuery solRquery = new SolrQuery();
 		solRquery.setQuery(testQuery);
 		QueryResponse response = client.query(solRquery);
@@ -54,10 +54,10 @@ public class SolRUtils {
 		return response;
 	}
 	
-	public static QueryResponse executeQueryAgainstSolRWithStemmer(QueryString query) throws SolrServerException, IOException {
+	public static QueryResponse executeQueryAgainstSolRWithStemmer(QueryString query, String indexName) throws SolrServerException, IOException {
 		String testQuery = query.getTitle() +" "+ query.getDescription();
 //		String stemedQUery = org.apache.lucene.analysis.en.PorterStemmer.stem(testQuery);
-		SolrClient client = getClientInstance("tp1");
+		SolrClient client = getClientInstance(indexName);
 		SolrQuery solRquery = new SolrQuery();
 		solRquery.setQuery(TextMiningUtils.stemSentence(testQuery));
 		QueryResponse response = client.query(solRquery);

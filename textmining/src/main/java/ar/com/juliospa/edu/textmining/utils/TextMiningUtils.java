@@ -22,52 +22,82 @@ import edu.stanford.nlp.process.Stemmer;
 public class TextMiningUtils {
 
 	/**
-	 * escanea la carpeta para ver los archivos que hay 
+	 * escanea la carpeta para ver los archivos que hay
+	 * 
 	 * @return
 	 */
-	public static List<Path> scanForFiles(String aPath){
-		Path path= Paths.get(aPath);
-		 final List<Path> files=new ArrayList<>();
-		 try {
-		    Files.walkFileTree(path, new SimpleFileVisitor<Path>(){
-		     @Override
-		     public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-		          if(!attrs.isDirectory()){
-		               files.add(file);
-		          }
-		          return FileVisitResult.CONTINUE;
-		      }
-		     });
-		 } catch (IOException e) {
-		      e.printStackTrace();
-		 }
+	public static List<Path> scanForFiles(String aPath) {
+		Path path = Paths.get(aPath);
+		final List<Path> files = new ArrayList<>();
+		try {
+			Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
+				@Override
+				public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+					if (!attrs.isDirectory()) {
+						files.add(file);
+					}
+					return FileVisitResult.CONTINUE;
+				}
+			});
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		return files;
 	}
 
 	public static void objectsToXml(String pathOutMeasures, String fileOutMeasures, Object measures,
 			Class<?> classToMarshal) throws JAXBException, PropertyException {
 		// guardar measures en xml
-		File file = new File(pathOutMeasures+fileOutMeasures);
-	
+		File file = new File(pathOutMeasures + fileOutMeasures);
+
 		JAXBContext jaxbContext = JAXBContext.newInstance(classToMarshal);
 		Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
-	
+
 		// output pretty printed
 		jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-	
+
 		jaxbMarshaller.marshal(measures, file);
 		System.out.println(file.getAbsoluteFile());
 	}
 
 	public static String stemSentence(String tmp) {
-		if (tmp!=null && tmp.length()>0) {
-			Stemmer asd = new Stemmer();		
+		if (tmp != null && tmp.length() > 0) {
+			Stemmer asd = new Stemmer();
 			String[] tmplist = tmp.split(" ");
 			List<String> acum = new ArrayList<>();
 			Arrays.asList(tmplist).stream().forEach(str -> acum.add(asd.stem(str)));
-			return String.join(" ", acum);	
+			return String.join(" ", acum);
 		}
 		return tmp;
 	}
-	
+
+	public static String removeStopWords(String tmp, List<String> stopwords) {
+		if (tmp != null && tmp.length() > 0) {
+
+			List<String> acum = new ArrayList<>();
+			// 1ro necesito llevarlo a minusculas
+			String[] currentWords = tmp.toLowerCase().split(" ");
+
+			for (String cw : currentWords) {
+				// le saco todos los stopwords.
+				boolean flagRemove = false;
+				for (String sw : stopwords) {
+					// necesito remover palabras enteras
+					if (!flagRemove) {
+						if (cw.trim().equals(sw.trim())) {
+							flagRemove= true;
+						}
+					}
+				}
+				// si no se remueve se agrega al final 
+				if (!flagRemove) {
+					acum.add(cw.trim());
+				}
+			}
+			// junto todas las palabras.
+			return String.join(" ", acum);
+		}
+		return tmp;
+	}
+
 }

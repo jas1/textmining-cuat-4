@@ -2,12 +2,17 @@ package ar.com.juliospa.edu.textmining;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.PropertyException;
 import javax.xml.bind.Unmarshaller;
 
 import org.apache.solr.client.solrj.SolrClient;
@@ -50,14 +55,14 @@ public class TextMiningUtilsTest {
 	public void querySolrInstance() {
 		SolrClient client = SolRUtils.getClientInstance("lau_normativa");
 
-		String queryStr ="mendoza";
+		String queryStr = "mendoza";
 
 		SolrQuery query = new SolrQuery();
 		query.setQuery(queryStr);
-		//query.addFilterQuery("cat:electronics", "store:amazon.com");
-		//query.setFields("id", "price", "merchant", "cat", "store");
-		//query.setStart(0);
-		//query.set("defType", "edismax");
+		// query.addFilterQuery("cat:electronics", "store:amazon.com");
+		// query.setFields("id", "price", "merchant", "cat", "store");
+		// query.setStart(0);
+		// query.set("defType", "edismax");
 
 		try {
 			QueryResponse response = client.query(query);
@@ -89,46 +94,47 @@ public class TextMiningUtilsTest {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void oshumedXMLReader() {
 		try {
-			String path= "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
-			String fileDb="ohsumed.87";
+			String path = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
+			String fileDb = "ohsumed.87";
 
-			 try {
+			try {
 
-				File file = new File(path+fileDb);
+				File file = new File(path + fileDb);
 				JAXBContext jaxbContext = JAXBContext.newInstance(DocCollection.class);
 
 				Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 				DocCollection docCol = (DocCollection) jaxbUnmarshaller.unmarshal(file);
 				System.out.println(docCol);
 
-			  } catch (JAXBException e) {
+			} catch (JAXBException e) {
 				e.printStackTrace();
-			  }
-			
-			
+			}
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
-	 * la idea de esto es agarrar el formato del dataset de la pagina y migrarlo a XML
-	 * @throws Exception 
+	 * la idea de esto es agarrar el formato del dataset de la pagina y migrarlo
+	 * a XML
+	 * 
+	 * @throws Exception
 	 */
 	@Test
 	public void oshumedFormatToXML() {
 		try {
-			String path= "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/site_dl/";
-			String fileDb="ohsu-trec/trec9-train/ohsumed.87";
-			String fileOut="ohsumed.87.output.xml";
-			
-			DocCollection parsed = Trec87ParserUtil.parseDocCollectionFromFilePath(path+fileDb);
-			
-			File file = new File(path+fileOut);
+			String path = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/site_dl/";
+			String fileDb = "ohsu-trec/trec9-train/ohsumed.87";
+			String fileOut = "ohsumed.87.output.xml";
+
+			DocCollection parsed = Trec87ParserUtil.parseDocCollectionFromFilePath(path + fileDb);
+
+			File file = new File(path + fileOut);
 			JAXBContext jaxbContext = JAXBContext.newInstance(DocCollection.class);
 			Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
 
@@ -136,26 +142,26 @@ public class TextMiningUtilsTest {
 			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 
 			jaxbMarshaller.marshal(parsed, file);
-			//jaxbMarshaller.marshal(parsed, System.out);
+			// jaxbMarshaller.marshal(parsed, System.out);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			Assert.fail();
 		}
 		Assert.assertTrue(true);
-		
+
 	}
-	
+
 	/**
 	 * borrar todos los docuemtnos de la coleccion
 	 */
 	@Test
 	public void deleteDocumentsFromCollection() {
-		
+
 		SolrClient client = SolRUtils.getClientInstance("tp1");
 		try {
-			// esta comentado porque borra todo 
-			//client.deleteByQuery("*:*");
+			// esta comentado porque borra todo
+			// client.deleteByQuery("*:*");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -163,64 +169,181 @@ public class TextMiningUtilsTest {
 		}
 		Assert.assertTrue(true);
 	}
-	
-	/** aca la idea es directo del formato trec al indice solr
-	 * pasar los datos al solr 
-	 * **/
+
+	/**
+	 * aca la idea es directo del formato trec al indice solr pasar los datos al
+	 * solr
+	 **/
 	@Test
 	public void oshumedFormatToSolrIndex() {
 		try {
 			// path donde este el archivo original
-			String path= "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/site_dl/";
-			String fileDb="ohsu-trec/trec9-train/ohsumed.87";
-			//String fileOut="ohsumed.87.output.xml";
-			
+			String path = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/site_dl/";
+			String fileDb = "ohsu-trec/trec9-train/ohsumed.87";
+			// String fileOut="ohsumed.87.output.xml";
+
 			// parser
-			DocCollection parsed = Trec87ParserUtil.parseDocCollectionFromFilePath(path+fileDb);
-			// conexion con el solR ( tiene que estar levantado ) 
+			DocCollection parsed = Trec87ParserUtil.parseDocCollectionFromFilePath(path + fileDb);
+			// conexion con el solR ( tiene que estar levantado )
 			SolrClient client = SolRUtils.getClientInstance("tp1");
 
-			// para cada doc , vamos a crear un solr 
+			// para cada doc , vamos a crear un solr
 			for (Doc doc : parsed.getDocuments()) {
 				SolrInputDocument document = new SolrInputDocument();
-				// recorro todos los fields de la clase y los agrego al documento solr
+				// recorro todos los fields de la clase y los agrego al
+				// documento solr
 				// antes de hacer esto hay que dar de alta los campos
-				// agregar los campos que uso para indexar a mano en el solR admin
+				// agregar los campos que uso para indexar a mano en el solR
+				// admin
 				// solar admin > seleccionar la coleccion > schema > add field
-				document.addField(Doc.getFieldNameForXMl("Author",String.class,Doc.class), doc.getAuthor());
-				document.addField(Doc.getFieldNameForXMl("DocAbstract",String.class,Doc.class), doc.getDocAbstract());
-				document.addField(Doc.getFieldNameForXMl("Docno",Integer.class,Doc.class), doc.getDocno());
-				document.addField(Doc.getFieldNameForXMl("Id",Integer.class,Doc.class), doc.getId());
-				document.addField(Doc.getFieldNameForXMl("Mesh",String.class,Doc.class), doc.getMesh());
-				document.addField(Doc.getFieldNameForXMl("PublicationType",String.class,Doc.class), doc.getPublicationType());
-				document.addField(Doc.getFieldNameForXMl("Source",String.class,Doc.class), doc.getSource());
-				document.addField(Doc.getFieldNameForXMl("Title",String.class,Doc.class), doc.getTitle());
-				
+				document.addField(Doc.getFieldNameForXMl("Author", String.class, Doc.class), doc.getAuthor());
+				document.addField(Doc.getFieldNameForXMl("DocAbstract", String.class, Doc.class), doc.getDocAbstract());
+				document.addField(Doc.getFieldNameForXMl("Docno", Integer.class, Doc.class), doc.getDocno());
+				document.addField(Doc.getFieldNameForXMl("Id", Integer.class, Doc.class), doc.getId());
+				document.addField(Doc.getFieldNameForXMl("Mesh", String.class, Doc.class), doc.getMesh());
+				document.addField(Doc.getFieldNameForXMl("PublicationType", String.class, Doc.class),
+						doc.getPublicationType());
+				document.addField(Doc.getFieldNameForXMl("Source", String.class, Doc.class), doc.getSource());
+				document.addField(Doc.getFieldNameForXMl("Title", String.class, Doc.class), doc.getTitle());
+
 				// lo agrego al response
 				UpdateResponse response = client.add(document);
-//				System.out.println(response.getStatus());
+				// System.out.println(response.getStatus());
 				// comiteo al server
 				client.commit();
-			}			
+			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			Assert.fail();
 		}
 		Assert.assertTrue(true);
-		
+
 	}
-	
+
+	/**
+	 * 
+	 * load with stemmer
+	 */
 	@Test
-	public void standarizeQueriesToXml(){
-		String path= "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
-		String fileQueries="query.ohsu.1-63.xml";
-		String fileQueriesNorm="query.ohsu.1-63.norm.v2.xml";
-		
+	public void oshumedFormatToSolrIndexStemmer() {
+		try {
+			// path donde este el archivo original
+			String path = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/site_dl/";
+			String fileDb = "ohsu-trec/trec9-train/ohsumed.87";
+			// String fileOut="ohsumed.87.output.xml";
+
+			// parser
+			DocCollection parsed = Trec87ParserUtil.parseDocCollectionFromFilePath(path + fileDb);
+			// conexion con el solR ( tiene que estar levantado )
+			SolrClient client = SolRUtils.getClientInstance("tp1-stemmer");
+
+			// para cada doc , vamos a crear un solr
+			for (Doc doc : parsed.getDocuments()) {
+				SolrInputDocument document = new SolrInputDocument();
+				// recorro todos los fields de la clase y los agrego al
+				// documento solr
+				// antes de hacer esto hay que dar de alta los campos
+				// agregar los campos que uso para indexar a mano en el solR
+				// admin
+				// solar admin > seleccionar la coleccion > schema > add field
+				document.addField(Doc.getFieldNameForXMl("Author", String.class, Doc.class),doc.getAuthor() == null ? doc.getAuthor() : doc.getAuthor().toLowerCase());
+				document.addField(Doc.getFieldNameForXMl("DocAbstract", String.class, Doc.class),doc.getDocAbstract() == null ? doc.getDocAbstract(): TextMiningUtils.stemSentence(doc.getDocAbstract().toLowerCase()));
+				document.addField(Doc.getFieldNameForXMl("Docno", Integer.class, Doc.class), doc.getDocno());
+				document.addField(Doc.getFieldNameForXMl("Id", Integer.class, Doc.class), doc.getId());
+				document.addField(Doc.getFieldNameForXMl("Mesh", String.class, Doc.class), doc.getMesh() == null? doc.getMesh() : TextMiningUtils.stemSentence(doc.getMesh().toLowerCase()));
+				document.addField(Doc.getFieldNameForXMl("PublicationType", String.class, Doc.class),doc.getPublicationType() == null ? doc.getPublicationType(): doc.getPublicationType().toLowerCase());
+				document.addField(Doc.getFieldNameForXMl("Source", String.class, Doc.class),doc.getSource() == null ? doc.getSource() : doc.getSource().toLowerCase());
+				document.addField(Doc.getFieldNameForXMl("Title", String.class, Doc.class), doc.getTitle() == null? doc.getTitle() : TextMiningUtils.stemSentence(doc.getTitle().toLowerCase()));
+
+				// lo agrego al response
+				UpdateResponse response = client.add(document);
+				System.out.println(response.getStatus());
+				// comiteo al server
+				client.commit();
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			try {
+				// SolrClient client =
+				// SolRUtils.getClientInstance("tp1-stemmer");
+				// client.deleteByQuery("*:*");
+			} catch (Exception e1) {
+				e1.printStackTrace();
+				Assert.fail();
+			}
+			Assert.fail();
+		}
+		Assert.assertTrue(true);
+	}
+
+	@Test
+	public void oshumedFormatToSolrIndexStopWords() {
+		try {
+			// path donde este el archivo original
+			String path = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/site_dl/";
+			String fileDb = "ohsu-trec/trec9-train/ohsumed.87";
+			// String fileOut="ohsumed.87.output.xml";
+
+			String pathSW = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
+			String stopwordsFile = "stopwords.txt";
+
+			List<String> stopWordList = Files.lines(Paths.get(pathSW + stopwordsFile)).collect(Collectors.toList());
+
+			// parser
+			DocCollection parsed = Trec87ParserUtil.parseDocCollectionFromFilePath(path + fileDb);
+			// conexion con el solR ( tiene que estar levantado )
+			SolrClient client = SolRUtils.getClientInstance("tp1-sw");
+
+			// para cada doc , vamos a crear un solr
+			for (Doc doc : parsed.getDocuments()) {
+				SolrInputDocument document = new SolrInputDocument();
+				// recorro todos los fields de la clase y los agrego al
+				// documento solr
+				// antes de hacer esto hay que dar de alta los campos
+				// agregar los campos que uso para indexar a mano en el solR
+				// admin
+				// solar admin > seleccionar la coleccion > schema > add field
+				String author = doc.getAuthor() == null ? doc.getAuthor() : doc.getAuthor().toLowerCase();
+				document.addField(Doc.getFieldNameForXMl("Author", String.class, Doc.class),author);
+				String abstractDoc = doc.getDocAbstract() == null ? doc.getDocAbstract(): TextMiningUtils.removeStopWords(doc.getDocAbstract().toLowerCase(),stopWordList );
+				document.addField(Doc.getFieldNameForXMl("DocAbstract", String.class, Doc.class),abstractDoc);
+				document.addField(Doc.getFieldNameForXMl("Docno", Integer.class, Doc.class), doc.getDocno());
+				document.addField(Doc.getFieldNameForXMl("Id", Integer.class, Doc.class), doc.getId());
+				String mesh = doc.getMesh() == null? doc.getMesh() : TextMiningUtils.removeStopWords(doc.getMesh().toLowerCase(),stopWordList);
+				document.addField(Doc.getFieldNameForXMl("Mesh", String.class, Doc.class), mesh);
+				String publi = doc.getPublicationType() == null ? doc.getPublicationType(): doc.getPublicationType().toLowerCase();
+				document.addField(Doc.getFieldNameForXMl("PublicationType", String.class, Doc.class),publi);
+				Object source = doc.getSource() == null ? doc.getSource() : doc.getSource().toLowerCase();
+				document.addField(Doc.getFieldNameForXMl("Source", String.class, Doc.class),source);
+				Object title = doc.getTitle() == null? doc.getTitle() : TextMiningUtils.removeStopWords(doc.getTitle().toLowerCase(),stopWordList);
+				document.addField(Doc.getFieldNameForXMl("Title", String.class, Doc.class), title);
+				// lo agrego al response
+				UpdateResponse response = client.add(document);
+				// System.out.println(response.getStatus());
+				// comiteo al server
+				client.commit();
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Assert.fail();
+		}
+		Assert.assertTrue(true);
+
+	}
+
+	@Test
+	public void standarizeQueriesToXml() {
+		String path = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
+		String fileQueries = "query.ohsu.1-63.xml";
+		String fileQueriesNorm = "query.ohsu.1-63.norm.v2.xml";
+
 		Trec87QueryNormalizer normalizer = new Trec87QueryNormalizer();
 		try {
-			QueryStringCollection parsed = normalizer.parseQueryColFromFilePath(path+fileQueries);
-			File file = new File(path+fileQueriesNorm);
+			QueryStringCollection parsed = normalizer.parseQueryColFromFilePath(path + fileQueries);
+			File file = new File(path + fileQueriesNorm);
 			JAXBContext jaxbContext = JAXBContext.newInstance(QueryStringCollection.class);
 			Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
 
@@ -232,35 +355,35 @@ public class TextMiningUtilsTest {
 			e.printStackTrace();
 			Assert.fail();
 		}
-		
+
 	}
+
 	@Test
 	public void readQueriesFromXmlTuneado() {
-		String path= "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
-		String fileDb="query.ohsu.1-63.norm.v2.xml";
-		
+		String path = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
+		String fileDb = "query.ohsu.1-63.norm.v2.xml";
+
 		try {
 			QueryStringCollection queryCol = Trec87QueryNormalizer.parseQueries(path, fileDb);
 			System.out.println(queryCol.getTops().get(0).getTitle());
 
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 			Assert.fail();
 		}
 	}
-	
+
 	// la idea de esto es leer el archivo de queries.
 	@Test
-	public void queriesResultFile(){
-		String path= "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
-		String fileResult="qrels.ohsu.batch.87";
+	public void queriesResultFile() {
+		String path = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
+		String fileResult = "qrels.ohsu.batch.87";
 		try {
-			List<ExpectedResult> result = Trec87ResultParser.parseExpectedResults(path+fileResult);
-			System.out.println(result.size());			
+			List<ExpectedResult> result = Trec87ResultParser.parseExpectedResults(path + fileResult);
+			System.out.println(result.size());
 
-			Trec87ResultParser.expectedQuantities(result); 
-						
+			Trec87ResultParser.expectedQuantities(result);
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -272,77 +395,76 @@ public class TextMiningUtilsTest {
 	 * este es para correr la 1ra query contra solR
 	 */
 	@Test
-	public void runqQueryForTest(){
-		String path= "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
-		String fileDb="query.ohsu.1-63.norm.v2.xml";
-		
+	public void runqQueryForTest() {
+		String path = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
+		String fileDb = "query.ohsu.1-63.norm.v2.xml";
+
 		try {
 			QueryStringCollection queryCol = Trec87QueryNormalizer.parseQueries(path, fileDb);
-			
+
 			// armo el termino de la query
-			String testQuery = queryCol.getTops().get(0).getTitle() + " "+ queryCol.getTops().get(0).getDescription();
+			String testQuery = queryCol.getTops().get(0).getTitle() + " " + queryCol.getTops().get(0).getDescription();
 			System.out.println(testQuery);
-			
+
 			// levanto instancia solR
 			SolrClient client = SolRUtils.getClientInstance("tp1");
-//			ejecuto query solr
-			
+			// ejecuto query solr
+
 			SolrQuery query = new SolrQuery();
 			query.setQuery(testQuery);
-			//query.addFilterQuery("cat:electronics", "store:amazon.com");
-			//query.setFields("id", "price", "merchant", "cat", "store");
-			//query.setStart(0);
-			//query.set("defType", "edismax");
+			// query.addFilterQuery("cat:electronics", "store:amazon.com");
+			// query.setFields("id", "price", "merchant", "cat", "store");
+			// query.setStart(0);
+			// query.set("defType", "edismax");
 
 			try {
 				QueryResponse response = client.query(query);
 				SolrDocumentList results = response.getResults();
-				System.out.println("se encontraron: "+results.getNumFound());
+				System.out.println("se encontraron: " + results.getNumFound());
 			} catch (Exception e) {
 				e.printStackTrace();
 				Assert.fail();
 			}
-			
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			Assert.fail();
 		}
 	}
+
 	/**
 	 * para ejecutar la query analizar el resultado vs los resultados esperados
 	 */
 	@Test
 	public void compareQueryResultVsQueryExpected() {
-		String pathQueries= "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
-		String fileQueries="query.ohsu.1-63.norm.v2.xml";
-		String pathExpected= "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
-		String fileExpected="qrels.ohsu.batch.87";
-		
-		String pathOutMeasures= "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
-		String fileOutMeasures="jaspa.query1.measures.xml";
-		
+		String pathQueries = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
+		String fileQueries = "query.ohsu.1-63.norm.v2.xml";
+		String pathExpected = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
+		String fileExpected = "qrels.ohsu.batch.87";
+
+		String pathOutMeasures = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
+		String fileOutMeasures = "jaspa.query1.measures.xml";
+
 		int queryNumber = 0;
-		
+
 		try {
-			QueryStringCollection queries = Trec87QueryNormalizer.parseQueries(pathQueries,fileQueries);
-			List<ExpectedResult> expectedResult = Trec87ResultParser.parseExpectedResults(pathExpected+fileExpected);
-			
-			
-			QueryResponse response = SolRUtils.executeQueryAgainstSolR(queries, queryNumber);
+			QueryStringCollection queries = Trec87QueryNormalizer.parseQueries(pathQueries, fileQueries);
+			List<ExpectedResult> expectedResult = Trec87ResultParser.parseExpectedResults(pathExpected + fileExpected);
+
+			QueryResponse response = SolRUtils.executeQueryAgainstSolR(queries, queryNumber, "tp1");
 			SolrDocumentList results = response.getResults();
-			
-			List<ExpectedResult> expectedResultForQuery = SolRUtils.getExpectedResultsForQueryNumber(queries, expectedResult,queryNumber);
-			
+
+			List<ExpectedResult> expectedResultForQuery = SolRUtils.getExpectedResultsForQueryNumber(queries,
+					expectedResult, queryNumber);
+
 			Measures measures = new Measures(queries.getTops().get(queryNumber), results, expectedResultForQuery);
 			measures.showMeasures();
 			Class<MeasuresContainer> classToMarshal = MeasuresContainer.class;
 			MeasuresContainer container = new MeasuresContainer();
 			container.getList().add(measures);
-			
+
 			TextMiningUtils.objectsToXml(pathOutMeasures, fileOutMeasures, container, classToMarshal);
-			
-			
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -351,80 +473,112 @@ public class TextMiningUtilsTest {
 
 	@Test
 	public void allQueryDatasetEval() {
-		String pathQueries= "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
-		String fileQueries="query.ohsu.1-63.norm.v2.xml";
-		String pathExpected= "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
-		String fileExpected="qrels.ohsu.batch.87";
-		
-		String pathOutMeasures= "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
-		String fileOutMeasures="jaspa.queries.measures.xml";
-		
-		try {
-			QueryStringCollection queries = Trec87QueryNormalizer.parseQueries(pathQueries,fileQueries);
-			List<ExpectedResult> expectedResult = Trec87ResultParser.parseExpectedResults(pathExpected+fileExpected);
-			
-			MeasuresContainer container = new MeasuresContainer();
-			
-			for (QueryString query : queries.getTops()) {
-				QueryResponse response = SolRUtils.executeQueryAgainstSolR(query);
-				SolrDocumentList results = response.getResults();
-				List<ExpectedResult> expectedResultForQuery = SolRUtils.getExpectedResultsForQueryNumber(query, expectedResult);
-				Measures measures = new Measures(query, results, expectedResultForQuery);
-				container.getList().add(measures);
-			}
+		String pathQueries = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
+		String fileQueries = "query.ohsu.1-63.norm.v2.xml";
+		String pathExpected = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
+		String fileExpected = "qrels.ohsu.batch.87";
 
-			Class<MeasuresContainer> classToMarshal = MeasuresContainer.class;		
-			TextMiningUtils.objectsToXml(pathOutMeasures, fileOutMeasures, container, classToMarshal);
+		String pathOutMeasures = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
+		String fileOutMeasures = "jaspa.queries.measures.xml";
+		String indexName = "tp1";
+
+		try {
+			executeTrec87AndGetMeasuresOnIndex(pathQueries, fileQueries, pathExpected, fileExpected, pathOutMeasures,
+					fileOutMeasures, indexName);
 		} catch (Exception e) {
 			e.printStackTrace();
 			Assert.fail();
 		}
-		
+
 	}
-	
-	
-	
-	//http://stackoverflow.com/questions/32372647/solr-stemming-words-using-solr
+
+	private void executeTrec87AndGetMeasuresOnIndex(String pathQueries, String fileQueries, String pathExpected,
+			String fileExpected, String pathOutMeasures, String fileOutMeasures, String indexName)
+			throws JAXBException, Exception, SolrServerException, IOException, PropertyException {
+		QueryStringCollection queries = Trec87QueryNormalizer.parseQueries(pathQueries, fileQueries);
+		List<ExpectedResult> expectedResult = Trec87ResultParser.parseExpectedResults(pathExpected + fileExpected);
+
+		MeasuresContainer container = new MeasuresContainer();
+
+		for (QueryString query : queries.getTops()) {
+
+			QueryResponse response = SolRUtils.executeQueryAgainstSolR(query, indexName);
+			SolrDocumentList results = response.getResults();
+			List<ExpectedResult> expectedResultForQuery = SolRUtils.getExpectedResultsForQueryNumber(query,
+					expectedResult);
+			Measures measures = new Measures(query, results, expectedResultForQuery);
+			container.getList().add(measures);
+		}
+
+		Class<MeasuresContainer> classToMarshal = MeasuresContainer.class;
+		TextMiningUtils.objectsToXml(pathOutMeasures, fileOutMeasures, container, classToMarshal);
+	}
+
+	private void executeTrec87AndGetMeasuresOnIndexOnStemmed(String pathQueries, String fileQueries,
+			String pathExpected, String fileExpected, String pathOutMeasures, String fileOutMeasures, String indexName)
+			throws JAXBException, Exception, SolrServerException, IOException, PropertyException {
+		QueryStringCollection queries = Trec87QueryNormalizer.parseQueries(pathQueries, fileQueries);
+		List<ExpectedResult> expectedResult = Trec87ResultParser.parseExpectedResults(pathExpected + fileExpected);
+
+		MeasuresContainer container = new MeasuresContainer();
+
+		for (QueryString query : queries.getTops()) {
+
+			QueryResponse response = SolRUtils.executeQueryAgainstSolRWithStemmer(query, indexName);
+			SolrDocumentList results = response.getResults();
+			List<ExpectedResult> expectedResultForQuery = SolRUtils.getExpectedResultsForQueryNumber(query,
+					expectedResult);
+			Measures measures = new Measures(query, results, expectedResultForQuery);
+			container.getList().add(measures);
+		}
+
+		Class<MeasuresContainer> classToMarshal = MeasuresContainer.class;
+		TextMiningUtils.objectsToXml(pathOutMeasures, fileOutMeasures, container, classToMarshal);
+	}
+
+	// http://stackoverflow.com/questions/32372647/solr-stemming-words-using-solr
 	@Test
 	public void stemmer() {
-		String pathQueries= "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
-		String fileQueries="query.ohsu.1-63.norm.v2.xml";
-		String pathExpected= "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
-		String fileExpected="qrels.ohsu.batch.87";
-		
-		String pathOutMeasures= "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
-		String fileOutMeasures="jaspa.query1.measures.xml";
-		
+		String pathQueries = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
+		String fileQueries = "query.ohsu.1-63.norm.v2.xml";
+		String pathExpected = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
+		String fileExpected = "qrels.ohsu.batch.87";
+
+		String pathOutMeasures = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
+		String fileOutMeasures = "jaspa.query1.measures.xml";
+
 		int queryNumber = 0;
-		
+
 		try {
-			QueryStringCollection queries = Trec87QueryNormalizer.parseQueries(pathQueries,fileQueries);
-			List<ExpectedResult> expectedResult = Trec87ResultParser.parseExpectedResults(pathExpected+fileExpected);
-			
-			
-			QueryResponse response = SolRUtils.executeQueryAgainstSolRWithStemmer(queries.getTops().get(queryNumber));
+			QueryStringCollection queries = Trec87QueryNormalizer.parseQueries(pathQueries, fileQueries);
+			List<ExpectedResult> expectedResult = Trec87ResultParser.parseExpectedResults(pathExpected + fileExpected);
+
+			QueryResponse response = SolRUtils.executeQueryAgainstSolRWithStemmer(queries.getTops().get(queryNumber),
+					"tp1");
 			SolrDocumentList results = response.getResults();
-			
-			List<ExpectedResult> expectedResultForQuery = SolRUtils.getExpectedResultsForQueryNumber(queries, expectedResult,queryNumber);
-			
+
+			List<ExpectedResult> expectedResultForQuery = SolRUtils.getExpectedResultsForQueryNumber(queries,
+					expectedResult, queryNumber);
+
 			Measures measures = new Measures(queries.getTops().get(queryNumber), results, expectedResultForQuery);
 			measures.showMeasures();
 
-			//TextMiningUtils.objectsToXml(pathOutMeasures, fileOutMeasures, container, classToMarshal);
-			
-			
+			// TextMiningUtils.objectsToXml(pathOutMeasures, fileOutMeasures,
+			// container, classToMarshal);
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Test
 	public void testStemmer() {
 		String tmp = "60 year old menopausal woman without hormone replacement therapy anticardiolipin and lupus anticoagulants, pathophysiology, epidemiology, complications";
 
 		TextMiningUtils.stemSentence(tmp);
 	}
+
 	@Test
 	public void deleteAllFromStemmerTp1() {
 		try {
@@ -434,55 +588,183 @@ public class TextMiningUtilsTest {
 			Assert.fail();
 		}
 	}
-	
 	@Test
-	public void oshumedFormatToSolrIndexStemmer() {
+	public void deleteAllFromSwTp1() {
 		try {
-			// path donde este el archivo original
-			String path= "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/site_dl/";
-			String fileDb="ohsu-trec/trec9-train/ohsumed.87";
-			//String fileOut="ohsumed.87.output.xml";
-			
-			// parser
-			DocCollection parsed = Trec87ParserUtil.parseDocCollectionFromFilePath(path+fileDb);
-			// conexion con el solR ( tiene que estar levantado ) 
-			SolrClient client = SolRUtils.getClientInstance("tp1-stemmer");
-
-			// para cada doc , vamos a crear un solr 
-			for (Doc doc : parsed.getDocuments()) {
-				SolrInputDocument document = new SolrInputDocument();
-				// recorro todos los fields de la clase y los agrego al documento solr
-				// antes de hacer esto hay que dar de alta los campos
-				// agregar los campos que uso para indexar a mano en el solR admin
-				// solar admin > seleccionar la coleccion > schema > add field
-				document.addField(Doc.getFieldNameForXMl("Author",String.class,Doc.class), doc.getAuthor()==null? doc.getAuthor():doc.getAuthor().toLowerCase());
-				document.addField(Doc.getFieldNameForXMl("DocAbstract",String.class,Doc.class), doc.getDocAbstract()==null? doc.getDocAbstract():TextMiningUtils.stemSentence(doc.getDocAbstract().toLowerCase()));
-				document.addField(Doc.getFieldNameForXMl("Docno",Integer.class,Doc.class), doc.getDocno());
-				document.addField(Doc.getFieldNameForXMl("Id",Integer.class,Doc.class), doc.getId());
-				document.addField(Doc.getFieldNameForXMl("Mesh",String.class,Doc.class), doc.getMesh()==null? doc.getMesh():TextMiningUtils.stemSentence(doc.getMesh().toLowerCase()));
-				document.addField(Doc.getFieldNameForXMl("PublicationType",String.class,Doc.class), doc.getPublicationType()==null? doc.getPublicationType():doc.getPublicationType().toLowerCase());
-				document.addField(Doc.getFieldNameForXMl("Source",String.class,Doc.class), doc.getSource()==null? doc.getSource():doc.getSource().toLowerCase());
-				document.addField(Doc.getFieldNameForXMl("Title",String.class,Doc.class), doc.getTitle()==null? doc.getTitle():TextMiningUtils.stemSentence(doc.getTitle().toLowerCase()));
-				
-				// lo agrego al response
-				UpdateResponse response = client.add(document);
-				System.out.println(response.getStatus());
-				// comiteo al server
-				client.commit();
-			}			
+			SolrClient client = SolRUtils.getClientInstance("tp1-sw");
+			client.deleteByQuery("*:*");
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			try {
-//				SolrClient client = SolRUtils.getClientInstance("tp1-stemmer");
-//				client.deleteByQuery("*:*");
-			} catch (Exception e1) {
-				e1.printStackTrace();
-				Assert.fail();
-			}
 			Assert.fail();
 		}
-		Assert.assertTrue(true);
-		
 	}
+
+	@Test
+	public void allQueryDatasetEvalOnStemmed() {
+		String pathQueries = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/arreglados/";
+		String fileQueries = "query.ohsu.1-63.norm.v2.xml";
+		String pathExpected = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
+		String fileExpected = "qrels.ohsu.batch.87";
+
+		String pathOutMeasures = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
+		String fileOutMeasures = "jaspa.queries.stemmed.measures.xml";
+		String indexName = "tp1-stemmer";
+
+		try {
+			executeTrec87AndGetMeasuresOnIndexOnStemmed(pathQueries, fileQueries, pathExpected, fileExpected,
+					pathOutMeasures, fileOutMeasures, indexName);
+		} catch (Exception e) {
+			e.printStackTrace();
+			Assert.fail();
+		}
+
+	}
+
+	@Test
+	public void allQueryDatasetEvalEdismaxAnalisis() {
+		String pathQueries = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/arreglados/";
+		String fileQueries = "query.ohsu.1-63.norm.v2.xml";
+		String pathExpected = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
+		String fileExpected = "qrels.ohsu.batch.87";
+
+		String pathOutMeasures = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
+		String fileOutMeasures = "jaspa.queries.edismaxconfig.measures.xml";
+		String indexName = "tp1";
+
+		try {
+			QueryStringCollection queries = Trec87QueryNormalizer.parseQueries(pathQueries, fileQueries);
+			List<ExpectedResult> expectedResult = Trec87ResultParser.parseExpectedResults(pathExpected + fileExpected);
+
+			MeasuresContainer container = new MeasuresContainer();
+
+			for (QueryString query : queries.getTops()) {
+
+				String testQuery = query.getTitle() + " " + query.getDescription();
+				SolrClient client = SolRUtils.getClientInstance(indexName);
+				SolrQuery solRquery = new SolrQuery();
+				// ver http://www.solrtutorial.com/solrj-tutorial.html
+				solRquery.setQuery(testQuery);
+				solRquery.set("defType", "edismax");
+				QueryResponse response = client.query(solRquery);
+
+				SolrDocumentList results = response.getResults();
+				List<ExpectedResult> expectedResultForQuery = SolRUtils.getExpectedResultsForQueryNumber(query,
+						expectedResult);
+				Measures measures = new Measures(query, results, expectedResultForQuery);
+				container.getList().add(measures);
+			}
+
+			Class<MeasuresContainer> classToMarshal = MeasuresContainer.class;
+			TextMiningUtils.objectsToXml(pathOutMeasures, fileOutMeasures, container, classToMarshal);
+		} catch (Exception e) {
+			e.printStackTrace();
+			Assert.fail();
+		}
+	}
+	
+	@Test
+	public void allQueryDatasetEvalStopWordsAnalisis() {
+		String pathQueries = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/arreglados/";
+		String fileQueries = "query.ohsu.1-63.norm.v2.xml";
+		String pathExpected = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
+		String fileExpected = "qrels.ohsu.batch.87";
+
+		String pathOutMeasures = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
+		String fileOutMeasures = "jaspa.queries.stopwords.measures.xml";
+		String pathSW = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
+		String stopwordsFile = "stopwords.txt";
+		
+		String indexName = "tp1-sw";
+
+		try {
+			QueryStringCollection queries = Trec87QueryNormalizer.parseQueries(pathQueries, fileQueries);
+			List<ExpectedResult> expectedResult = Trec87ResultParser.parseExpectedResults(pathExpected + fileExpected);
+			List<String> stopWords = Files.lines(Paths.get(pathSW + stopwordsFile)).collect(Collectors.toList());
+			MeasuresContainer container = new MeasuresContainer();
+
+			for (QueryString query : queries.getTops()) {
+
+				String testQuery = query.getTitle() + " " + query.getDescription();
+				SolrClient client = SolRUtils.getClientInstance(indexName);
+				SolrQuery solRquery = new SolrQuery();
+				// ver http://www.solrtutorial.com/solrj-tutorial.html
+				solRquery.setQuery(TextMiningUtils.removeStopWords(testQuery, stopWords));
+				QueryResponse response = client.query(solRquery);
+
+				SolrDocumentList results = response.getResults();
+				List<ExpectedResult> expectedResultForQuery = SolRUtils.getExpectedResultsForQueryNumber(query,
+						expectedResult);
+				Measures measures = new Measures(query, results, expectedResultForQuery);
+				container.getList().add(measures);
+			}
+
+			Class<MeasuresContainer> classToMarshal = MeasuresContainer.class;
+			TextMiningUtils.objectsToXml(pathOutMeasures, fileOutMeasures, container, classToMarshal);
+		} catch (Exception e) {
+			e.printStackTrace();
+			Assert.fail();
+		}
+	}
+
+	@Test
+	public void allQueryDatasetEvalNormalFilterAnalisis() {
+		String pathQueries = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/arreglados/";
+		String fileQueries = "query.ohsu.1-63.norm.v2.xml";
+		String pathExpected = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
+		String fileExpected = "qrels.ohsu.batch.87";
+
+		String pathOutMeasures = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
+		String fileOutMeasures = "jaspa.queries.filterField.measures.xml";
+		String indexName = "tp1";
+
+		try {
+			QueryStringCollection queries = Trec87QueryNormalizer.parseQueries(pathQueries, fileQueries);
+			List<ExpectedResult> expectedResult = Trec87ResultParser.parseExpectedResults(pathExpected + fileExpected);
+
+			MeasuresContainer container = new MeasuresContainer();
+
+			for (QueryString query : queries.getTops()) {
+
+				String testQuery = query.getTitle() + " " + query.getDescription();
+				SolrClient client = SolRUtils.getClientInstance(indexName);
+				SolrQuery solRquery = new SolrQuery();
+
+				// http://stackoverflow.com/questions/10324969/boosting-fields-in-solr-using-solrj
+				solRquery.setQuery(
+						"TITLE:" + query.getTitle() + " ABSTRACT:" + query.getDescription() + " MESH:" + testQuery);
+				// solRquery.setQuery(testQuery);
+
+				QueryResponse response = client.query(solRquery);
+
+				SolrDocumentList results = response.getResults();
+				List<ExpectedResult> expectedResultForQuery = SolRUtils.getExpectedResultsForQueryNumber(query,
+						expectedResult);
+				Measures measures = new Measures(query, results, expectedResultForQuery);
+				container.getList().add(measures);
+			}
+
+			Class<MeasuresContainer> classToMarshal = MeasuresContainer.class;
+			TextMiningUtils.objectsToXml(pathOutMeasures, fileOutMeasures, container, classToMarshal);
+		} catch (Exception e) {
+			e.printStackTrace();
+			Assert.fail();
+		}
+	}
+
+	@Test
+	public void testStopWordMethod() {
+		String pathSW = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
+		String stopwordsFile = "stopwords.txt";
+		String tmp = "60 year old menopausal woman without hormone replacement therapy anticardiolipin and lupus anticoagulants, pathophysiology, epidemiology, complications";
+		try {
+			Stream<String> stream = Files.lines(Paths.get(pathSW + stopwordsFile));
+
+			System.out.println(tmp);
+			System.out.println(TextMiningUtils.removeStopWords(tmp, stream.collect(Collectors.toList())));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
 }
