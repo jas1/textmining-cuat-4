@@ -8,9 +8,12 @@ import java.util.Iterator;
 import java.util.function.Function;
 
 import edu.stanford.nlp.ling.Word;
-import edu.stanford.nlp.process.PTBTokenizer;
-// ESTO COMIDO DEL GITHUB
+
 /**
+ * Esto esta sacado del GITHUB, copy paste, porque no estaba en la libreria que baje
+ * que esta en el POM.
+ * Es una implementacion del algoritmo de porter.
+ * 
  * Stemmer, implementing the Porter Stemming Algorithm
  * <p/>
  * The Stemmer class transforms a word into its root form.  The input

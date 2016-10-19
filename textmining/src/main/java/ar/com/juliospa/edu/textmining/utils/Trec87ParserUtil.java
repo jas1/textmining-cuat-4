@@ -6,6 +6,11 @@ import java.util.Scanner;
 import ar.com.juliospa.edu.textmining.domain.Doc;
 import ar.com.juliospa.edu.textmining.domain.DocCollection;
 
+/**
+ * proceso para transformar el archivo TREC a objetos
+ * @author julio
+ *
+ */
 public class Trec87ParserUtil {
 
 	private static final String I = ".I";
@@ -40,7 +45,12 @@ public class Trec87ParserUtil {
 //como lo lograria : parsear > popular el entity > marshalear a xml
 	
 	
-	
+/**
+ * devuelve una coleccion de Documentos en modo objeto
+ * @param filePaht
+ * @return
+ * @throws Exception
+ */
 	public static DocCollection parseDocCollectionFromFilePath(String filePaht) throws Exception {
 		File file = new File(filePaht);
 		Scanner input = new Scanner(file);
@@ -156,6 +166,11 @@ public class Trec87ParserUtil {
 		}
 	}
 
+	/**
+	 * para parsear linea de I, que es un caos especial.
+	 * @param line
+	 * @return
+	 */
 	private static Doc parseI(String line) {
 		Doc ret = new Doc();
 		ret.setId(Integer.parseInt(line.split(" ")[1]));

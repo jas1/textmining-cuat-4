@@ -6,6 +6,11 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ * wrapper de las queries a realizar
+ * @author julio
+ *
+ */
 @XmlRootElement(name="collection")
 public class QueryStringCollection {
 	//query.ohsu.1-63.xml

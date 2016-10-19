@@ -6,6 +6,11 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ * wrapper de los documentos a indexar
+ * @author julio
+ *
+ */
 @XmlRootElement(name="COLLECTION")
 public class DocCollection {
 

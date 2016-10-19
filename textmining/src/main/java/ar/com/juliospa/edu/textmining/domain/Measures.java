@@ -9,6 +9,15 @@ import javax.xml.bind.annotation.XmlElement;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 
+/**
+ * clase de medidas de la query.
+ * recibe la query, la lista de resultados, y la lista de esperados
+ * calcula las medidas y partes de las medidas tenidas en cuenta
+ * 
+ * en este caso , precision, recall, rprecission y fmeasure.
+ * @author julio
+ *
+ */
 public class Measures {
 
 	private String queryId;
@@ -30,6 +39,8 @@ public class Measures {
 	private Long topRRelevantesObtenidos;
 	private Integer topRPrecisionCant;
 	
+	public Measures() {}
+	
 	public Measures(QueryString query ,SolrDocumentList results, List<ExpectedResult> expectedResultForQuery) {
 		queryId =  query.getNumber();
 		relevantsReport = mapForRelevanceBuild(results, expectedResultForQuery);
@@ -46,13 +57,13 @@ public class Measures {
 		recall = ((double)relevantesObtenidos) / totalRelevantes;
 		
 //		precisionR 
-/*		An alternative, which alleviates this problem, is R-precision. ...
- * libro pagina: 
- * 
-en el libro : An Introduction to Information Retrieval
-capitulo: 8.4 Evaluation of ranked retrieval results
-en la pagina: 198 del pdf
-https://en.wikipedia.org/wiki/Information_retrieval#R-Precision
+	/*		An alternative, which alleviates this problem, is R-precision. ...
+	 * libro pagina: 
+	 * 
+	en el libro : An Introduction to Information Retrieval
+	capitulo: 8.4 Evaluation of ranked retrieval results
+	en la pagina: 198 del pdf
+	https://en.wikipedia.org/wiki/Information_retrieval#R-Precision
 	es la precision evaluada en cantidad de documentos = total de R existentes para la query, 
 	o sea para el caso de query 1 ohsumed , 6 son relevantes, entonces precision top 6
 	*/	
@@ -71,11 +82,20 @@ https://en.wikipedia.org/wiki/Information_retrieval#R-Precision
 	}
 
 
+	/**
+	 * para mostrar el mapa de relevancia, si no encontro en los reusltados le puso 0.
+	 * puede que haya cosas que sean relevantes pero que no esten en los resultados
+	 * estas cosas se sacan del mapa de resultados esperados, no de lo que se ve aca.
+	 * @param relMap
+	 */
 	public void showRelevanceMap(Map<Integer, Integer> relMap) {
 		System.out.println("relevant id"+" - "+"relevance match ( 0 , no match) ");
 		relevantsReport.entrySet().forEach(ent -> System.out.println(ent.getKey()+" - "+ent.getValue()));
 	}
 
+	/**
+	 * para mostrar las medidas
+	 */
 	public void showMeasures() {
 		System.out.println("total Obtenidos ="+totalObtenidos);
 		System.out.println("total relevantes="+totalRelevantes);
@@ -119,7 +139,13 @@ https://en.wikipedia.org/wiki/Information_retrieval#R-Precision
         showRelevanceMap(relevantsReport);
         
 	}
-	
+	/**
+	 * para armar el mapa de relevancia segun lo encontrado
+	 * OJO NO ES EL EXPECTED , sino el merge de found vs expected
+	 * @param docSublist
+	 * @param expectedResultForQuery
+	 * @return
+	 */
 	private Map<Integer, Integer> mapForRelevanceBuild(List<SolrDocument> docSublist,
 			List<ExpectedResult> expectedResultForQuery) {
 		Map<Integer,Integer> contieneDocumento = new HashMap<>();
@@ -127,7 +153,13 @@ https://en.wikipedia.org/wiki/Information_retrieval#R-Precision
 		expectedResultForQuery.forEach(exp -> docSublist.forEach(resu -> populateMapContainsDocs(exp,resu,contieneDocumento)));
 		return contieneDocumento;
 	}
-	
+	/**
+	 * para armar el mapa de relevancia segun lo encontrado
+	 * OJO NO ES EL EXPECTED , sino el merge de found vs expected
+	 * @param results
+	 * @param expectedResultForQuery
+	 * @return
+	 */
 	private Map<Integer, Integer> mapForRelevanceBuild(SolrDocumentList results,
 			List<ExpectedResult> expectedResultForQuery) {
 		Map<Integer,Integer> contieneDocumento = new HashMap<>();
@@ -135,7 +167,12 @@ https://en.wikipedia.org/wiki/Information_retrieval#R-Precision
 		expectedResultForQuery.forEach(exp -> results.forEach(resu -> populateMapContainsDocs(exp,resu,contieneDocumento)));
 		return contieneDocumento;
 	}
-	// funcion del loop : recorro expected, y me fijo por cada 1, si encuentro el resultado en los resultados.
+	/**
+	 * funcion del loop : recorro expected, y me fijo por cada 1, si encuentro el resultado en los resultados.
+	 * @param exp
+	 * @param resu
+	 * @param resultMap
+	 */
 	private void populateMapContainsDocs (ExpectedResult exp ,SolrDocument resu,Map<Integer,Integer> resultMap){
 		Integer currentKey = (Integer)resu.get("DOCNO");
 		
@@ -178,7 +215,6 @@ https://en.wikipedia.org/wiki/Information_retrieval#R-Precision
 		return totalObtenidos;
 	}
 
-
 	@XmlElement(name="rPrecision")
 	public double getrPrecision() {
 		return rPrecision;
@@ -200,10 +236,36 @@ https://en.wikipedia.org/wiki/Information_retrieval#R-Precision
 	public Integer getTopRPrecisionCant() {
 		return topRPrecisionCant;
 	}
-	public Map<Integer, Integer> getRelevantsReport() {
-		return relevantsReport;
+
+	public void setQueryId(String queryId) {
+		this.queryId = queryId;
 	}
-	public Map<Integer, Integer> getTopRRelevantsReport() {
-		return topRRelevantsReport;
+
+	public void setPrecision(double precision) {
+		this.precision = precision;
+	}
+
+	public void setRecall(double recall) {
+		this.recall = recall;
+	}
+
+	public void setrPrecision(double rPrecision) {
+		this.rPrecision = rPrecision;
+	}
+
+	public void setfMeasure(double fMeasure) {
+		this.fMeasure = fMeasure;
+	}
+
+	public void setRelevantesObtenidos(Long relevantesObtenidos) {
+		this.relevantesObtenidos = relevantesObtenidos;
+	}
+
+	public void setTopRRelevantesObtenidos(Long topRRelevantesObtenidos) {
+		this.topRRelevantesObtenidos = topRRelevantesObtenidos;
+	}
+
+	public void setTopRPrecisionCant(Integer topRPrecisionCant) {
+		this.topRPrecisionCant = topRPrecisionCant;
 	}	
 }

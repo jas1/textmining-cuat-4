@@ -4,7 +4,11 @@ import java.lang.reflect.Method;
 
 import javax.xml.bind.annotation.XmlElement;
 
-
+/**
+ * representacion de un documento a indexar
+ * @author julio
+ *
+ */
 public class Doc {
 
 	private Integer id;

@@ -1,5 +1,14 @@
 package ar.com.juliospa.edu.textmining.domain;
 
+/**
+ * helper: resultado esperado
+ * es para levantar los datos de los valores esperados para cada query
+ * queryid : id de la queyr
+ * document id: id del documento a encontrar
+ * relevance : relavancia del documento
+ * @author julio
+ *
+ */
 public class ExpectedResult {
 
 	private String queryId;

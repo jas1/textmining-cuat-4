@@ -1,17 +1,11 @@
 package ar.com.juliospa.edu.textmining.utils;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.util.Properties;
 import java.util.Scanner;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
-
-import org.w3c.tidy.Tidy;
 
 import ar.com.juliospa.edu.textmining.domain.QueryString;
 import ar.com.juliospa.edu.textmining.domain.QueryStringCollection;
@@ -38,37 +32,6 @@ public class Trec87QueryNormalizer {
 	private final static String DESC ="<desc>";
 	private final static String TOP_END ="</top>";
 	
-	
-	/**
-	 * no funciono.
-	 * @param filePaht
-	 * @param output
-	 * @throws FileNotFoundException
-	 */
-	@Deprecated
-	public void normalizeXhtml(String filePaht , String output) throws FileNotFoundException{
-		File file = new File(filePaht);
-		
-		// in & out
-		FileOutputStream fos = new FileOutputStream(output);
-		FileInputStream is = new FileInputStream(file);
-		
-		// para custom tags
-		Properties oProps = new Properties();
-		oProps.setProperty("new-blocklevel-tags", "top num title desc");
-//		oProps.setProperty("input-xml", "1");
-		
-		
-        Tidy tidy = new Tidy();
-        // para que abra y cierre
-        tidy.setXHTML(true);
-        // para setear los custom tags que definimos antes
-        tidy.setConfigurationFromProps(oProps);
-        
-        // parsea el IN y escribe en OUT , aplicandole la configuracion que hicimos
-        tidy.parse(is, fos);
-	}
-	
 	/**
 	 * para tener el listado de queries directo desde el xml 
 	 * @param path
@@ -83,7 +46,12 @@ public class Trec87QueryNormalizer {
 		QueryStringCollection queryCol = (QueryStringCollection) jaxbUnmarshaller.unmarshal(file);
 		return queryCol;
 	}
-
+	/**
+	 * para parsear las queries desde el pseudo xml de TREC y obtener objetos
+	 * @param filePaht
+	 * @return
+	 * @throws Exception
+	 */
 	public static QueryStringCollection parseQueryColFromFilePath(String filePaht) throws Exception {
 		File file = new File(filePaht);
 		Scanner input = new Scanner(file);

@@ -9,9 +9,20 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 import ar.com.juliospa.edu.textmining.domain.ExpectedResult;
-
+/**
+ * para levantar los resultados esperados
+ * @author julio
+ *
+ */
 public class Trec87ResultParser {
 	
+	/**
+	 * levanta el archivo de esperados
+	 * devuelve listado de objetos
+	 * @param filePath
+	 * @return listado de objetos representando lo esperado
+	 * @throws Exception
+	 */
 	public static List<ExpectedResult> parseExpectedResults(String filePath) throws Exception {
 
 		List<ExpectedResult> resultList = new ArrayList<>();
@@ -37,6 +48,11 @@ public class Trec87ResultParser {
 		return resultList;
 	}
 
+	/**
+	 * para obtener un mapa ordenado por ohsumedkey de cuantos hay por cada key.
+	 * @param result
+	 * @return
+	 */
 	public static Map<String,Long> expectedQuantitiesMap(List<ExpectedResult> result){
 		return result.stream()
 		.collect(Collectors.groupingBy(exp -> exp.getQueryId(), Collectors.counting()))
@@ -46,11 +62,6 @@ public class Trec87ResultParser {
 	}
 	
 	public static void expectedQuantities(List<ExpectedResult> result) {
-//		result.stream()
-//			.collect(Collectors.groupingBy(exp -> exp.getQueryId(), Collectors.counting()))
-//			.entrySet().stream()
-//				.sorted((e1, e2) -> sortByOHSUMEDKey(e1, e2)) 
-//				.forEach(System.out::println);
 		expectedQuantitiesMap(result).entrySet().stream()
 			.sorted((e1, e2) -> sortByOHSUMEDKey(e1, e2))
 			.forEach(System.out::println);

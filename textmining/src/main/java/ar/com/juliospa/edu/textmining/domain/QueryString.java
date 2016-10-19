@@ -2,6 +2,11 @@ package ar.com.juliospa.edu.textmining.domain;
 
 import javax.xml.bind.annotation.XmlElement;
 
+/**
+ * mapeo de las query a realizar
+ * @author julio
+ *
+ */
 public class QueryString {
 
 //	<top>

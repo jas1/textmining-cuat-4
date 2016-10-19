@@ -1,6 +1,7 @@
 package ar.com.juliospa.edu.textmining;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -12,12 +13,10 @@ import java.util.stream.Stream;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-import javax.xml.bind.PropertyException;
 import javax.xml.bind.Unmarshaller;
 
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.response.UpdateResponse;
 import org.apache.solr.common.SolrDocumentList;
@@ -38,8 +37,16 @@ import ar.com.juliospa.edu.textmining.utils.Trec87ParserUtil;
 import ar.com.juliospa.edu.textmining.utils.Trec87QueryNormalizer;
 import ar.com.juliospa.edu.textmining.utils.Trec87ResultParser;
 
+/**
+ * utilidades vairas para ir probando todo lo que se fue relaizando
+ * @author julio
+ *
+ */
 public class TextMiningUtilsTest {
 
+	/**
+	 * buscando en un dataset de leyes
+	 */
 	@Test
 	public void scanForFilesTestLauNormativa() {
 		String carpeta = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/dataset/raw/lau-normativa/20150430_BASE_NORMATIVA";
@@ -95,6 +102,9 @@ public class TextMiningUtilsTest {
 		}
 	}
 
+	/**
+	 * leer el xml de ohsumed
+	 */
 	public void oshumedXMLReader() {
 		try {
 			String path = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
@@ -278,6 +288,9 @@ public class TextMiningUtilsTest {
 		Assert.assertTrue(true);
 	}
 
+	/**
+	 * levantando el ohsumed a un indice con stopwords
+	 */
 	@Test
 	public void oshumedFormatToSolrIndexStopWords() {
 		try {
@@ -334,6 +347,9 @@ public class TextMiningUtilsTest {
 
 	}
 
+	/**
+	 * haciendo que las queries SEAN XML estricto
+	 */
 	@Test
 	public void standarizeQueriesToXml() {
 		String path = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
@@ -358,6 +374,9 @@ public class TextMiningUtilsTest {
 
 	}
 
+	/**
+	 * leyendo las queries del un XML estricto que fue realizado anteriormente.
+	 */
 	@Test
 	public void readQueriesFromXmlTuneado() {
 		String path = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
@@ -373,7 +392,9 @@ public class TextMiningUtilsTest {
 		}
 	}
 
-	// la idea de esto es leer el archivo de queries.
+	/**
+	 * levantar los resultados de las queries y ver cuantos resultoados son los esperables para cada 1.
+	 */
 	@Test
 	public void queriesResultFile() {
 		String path = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
@@ -454,7 +475,7 @@ public class TextMiningUtilsTest {
 			QueryResponse response = SolRUtils.executeQueryAgainstSolR(queries, queryNumber, "tp1");
 			SolrDocumentList results = response.getResults();
 
-			List<ExpectedResult> expectedResultForQuery = SolRUtils.getExpectedResultsForQueryNumber(queries,
+			List<ExpectedResult> expectedResultForQuery = TextMiningUtils.getExpectedResultsForQueryNumber(queries,
 					expectedResult, queryNumber);
 
 			Measures measures = new Measures(queries.getTops().get(queryNumber), results, expectedResultForQuery);
@@ -471,6 +492,9 @@ public class TextMiningUtilsTest {
 		}
 	}
 
+	/**
+	 * para crear las mediciones para una query especifica
+	 */
 	@Test
 	public void allQueryDatasetEval() {
 		String pathQueries = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
@@ -483,8 +507,23 @@ public class TextMiningUtilsTest {
 		String indexName = "tp1";
 
 		try {
-			executeTrec87AndGetMeasuresOnIndex(pathQueries, fileQueries, pathExpected, fileExpected, pathOutMeasures,
-					fileOutMeasures, indexName);
+			QueryStringCollection queries = Trec87QueryNormalizer.parseQueries(pathQueries, fileQueries);
+			List<ExpectedResult> expectedResult = Trec87ResultParser.parseExpectedResults(pathExpected + fileExpected);
+
+			MeasuresContainer container = new MeasuresContainer();
+
+			for (QueryString query : queries.getTops()) {
+
+				QueryResponse response = SolRUtils.executeQueryAgainstSolR(query, indexName);
+				SolrDocumentList results = response.getResults();
+				List<ExpectedResult> expectedResultForQuery = TextMiningUtils.getExpectedResultsForQueryNumber(query,
+						expectedResult);
+				Measures measures = new Measures(query, results, expectedResultForQuery);
+				container.getList().add(measures);
+			}
+
+			Class<MeasuresContainer> classToMarshal = MeasuresContainer.class;
+			TextMiningUtils.objectsToXml(pathOutMeasures, fileOutMeasures, container, classToMarshal);
 		} catch (Exception e) {
 			e.printStackTrace();
 			Assert.fail();
@@ -492,50 +531,7 @@ public class TextMiningUtilsTest {
 
 	}
 
-	private void executeTrec87AndGetMeasuresOnIndex(String pathQueries, String fileQueries, String pathExpected,
-			String fileExpected, String pathOutMeasures, String fileOutMeasures, String indexName)
-			throws JAXBException, Exception, SolrServerException, IOException, PropertyException {
-		QueryStringCollection queries = Trec87QueryNormalizer.parseQueries(pathQueries, fileQueries);
-		List<ExpectedResult> expectedResult = Trec87ResultParser.parseExpectedResults(pathExpected + fileExpected);
-
-		MeasuresContainer container = new MeasuresContainer();
-
-		for (QueryString query : queries.getTops()) {
-
-			QueryResponse response = SolRUtils.executeQueryAgainstSolR(query, indexName);
-			SolrDocumentList results = response.getResults();
-			List<ExpectedResult> expectedResultForQuery = SolRUtils.getExpectedResultsForQueryNumber(query,
-					expectedResult);
-			Measures measures = new Measures(query, results, expectedResultForQuery);
-			container.getList().add(measures);
-		}
-
-		Class<MeasuresContainer> classToMarshal = MeasuresContainer.class;
-		TextMiningUtils.objectsToXml(pathOutMeasures, fileOutMeasures, container, classToMarshal);
-	}
-
-	private void executeTrec87AndGetMeasuresOnIndexOnStemmed(String pathQueries, String fileQueries,
-			String pathExpected, String fileExpected, String pathOutMeasures, String fileOutMeasures, String indexName)
-			throws JAXBException, Exception, SolrServerException, IOException, PropertyException {
-		QueryStringCollection queries = Trec87QueryNormalizer.parseQueries(pathQueries, fileQueries);
-		List<ExpectedResult> expectedResult = Trec87ResultParser.parseExpectedResults(pathExpected + fileExpected);
-
-		MeasuresContainer container = new MeasuresContainer();
-
-		for (QueryString query : queries.getTops()) {
-
-			QueryResponse response = SolRUtils.executeQueryAgainstSolRWithStemmer(query, indexName);
-			SolrDocumentList results = response.getResults();
-			List<ExpectedResult> expectedResultForQuery = SolRUtils.getExpectedResultsForQueryNumber(query,
-					expectedResult);
-			Measures measures = new Measures(query, results, expectedResultForQuery);
-			container.getList().add(measures);
-		}
-
-		Class<MeasuresContainer> classToMarshal = MeasuresContainer.class;
-		TextMiningUtils.objectsToXml(pathOutMeasures, fileOutMeasures, container, classToMarshal);
-	}
-
+	/** para ver que tal dio el coso con stemming */
 	// http://stackoverflow.com/questions/32372647/solr-stemming-words-using-solr
 	@Test
 	public void stemmer() {
@@ -557,7 +553,7 @@ public class TextMiningUtilsTest {
 					"tp1");
 			SolrDocumentList results = response.getResults();
 
-			List<ExpectedResult> expectedResultForQuery = SolRUtils.getExpectedResultsForQueryNumber(queries,
+			List<ExpectedResult> expectedResultForQuery = TextMiningUtils.getExpectedResultsForQueryNumber(queries,
 					expectedResult, queryNumber);
 
 			Measures measures = new Measures(queries.getTops().get(queryNumber), results, expectedResultForQuery);
@@ -572,6 +568,9 @@ public class TextMiningUtilsTest {
 		}
 	}
 
+	/** para ver si el stemmer realiza stemming
+	 * 
+	 */
 	@Test
 	public void testStemmer() {
 		String tmp = "60 year old menopausal woman without hormone replacement therapy anticardiolipin and lupus anticoagulants, pathophysiology, epidemiology, complications";
@@ -579,6 +578,9 @@ public class TextMiningUtilsTest {
 		TextMiningUtils.stemSentence(tmp);
 	}
 
+	/**para borrar todo de la coleccion stemeada
+	 * 
+	 */
 	@Test
 	public void deleteAllFromStemmerTp1() {
 		try {
@@ -588,6 +590,9 @@ public class TextMiningUtilsTest {
 			Assert.fail();
 		}
 	}
+	/** para borrar todo de la coleccion stopwords
+	 * 
+	 */
 	@Test
 	public void deleteAllFromSwTp1() {
 		try {
@@ -598,6 +603,9 @@ public class TextMiningUtilsTest {
 		}
 	}
 
+	/**para ejecutar sobre la coleccion stemeada
+	 * 
+	 */
 	@Test
 	public void allQueryDatasetEvalOnStemmed() {
 		String pathQueries = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/arreglados/";
@@ -610,27 +618,6 @@ public class TextMiningUtilsTest {
 		String indexName = "tp1-stemmer";
 
 		try {
-			executeTrec87AndGetMeasuresOnIndexOnStemmed(pathQueries, fileQueries, pathExpected, fileExpected,
-					pathOutMeasures, fileOutMeasures, indexName);
-		} catch (Exception e) {
-			e.printStackTrace();
-			Assert.fail();
-		}
-
-	}
-
-	@Test
-	public void allQueryDatasetEvalEdismaxAnalisis() {
-		String pathQueries = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/arreglados/";
-		String fileQueries = "query.ohsu.1-63.norm.v2.xml";
-		String pathExpected = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
-		String fileExpected = "qrels.ohsu.batch.87";
-
-		String pathOutMeasures = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
-		String fileOutMeasures = "jaspa.queries.edismaxconfig.measures.xml";
-		String indexName = "tp1";
-
-		try {
 			QueryStringCollection queries = Trec87QueryNormalizer.parseQueries(pathQueries, fileQueries);
 			List<ExpectedResult> expectedResult = Trec87ResultParser.parseExpectedResults(pathExpected + fileExpected);
 
@@ -638,16 +625,9 @@ public class TextMiningUtilsTest {
 
 			for (QueryString query : queries.getTops()) {
 
-				String testQuery = query.getTitle() + " " + query.getDescription();
-				SolrClient client = SolRUtils.getClientInstance(indexName);
-				SolrQuery solRquery = new SolrQuery();
-				// ver http://www.solrtutorial.com/solrj-tutorial.html
-				solRquery.setQuery(testQuery);
-				solRquery.set("defType", "edismax");
-				QueryResponse response = client.query(solRquery);
-
+				QueryResponse response = SolRUtils.executeQueryAgainstSolRWithStemmer(query, indexName);
 				SolrDocumentList results = response.getResults();
-				List<ExpectedResult> expectedResultForQuery = SolRUtils.getExpectedResultsForQueryNumber(query,
+				List<ExpectedResult> expectedResultForQuery = TextMiningUtils.getExpectedResultsForQueryNumber(query,
 						expectedResult);
 				Measures measures = new Measures(query, results, expectedResultForQuery);
 				container.getList().add(measures);
@@ -659,97 +639,10 @@ public class TextMiningUtilsTest {
 			e.printStackTrace();
 			Assert.fail();
 		}
-	}
-	
-	@Test
-	public void allQueryDatasetEvalStopWordsAnalisis() {
-		String pathQueries = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/arreglados/";
-		String fileQueries = "query.ohsu.1-63.norm.v2.xml";
-		String pathExpected = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
-		String fileExpected = "qrels.ohsu.batch.87";
 
-		String pathOutMeasures = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
-		String fileOutMeasures = "jaspa.queries.stopwords.measures.xml";
-		String pathSW = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
-		String stopwordsFile = "stopwords.txt";
-		
-		String indexName = "tp1-sw";
-
-		try {
-			QueryStringCollection queries = Trec87QueryNormalizer.parseQueries(pathQueries, fileQueries);
-			List<ExpectedResult> expectedResult = Trec87ResultParser.parseExpectedResults(pathExpected + fileExpected);
-			List<String> stopWords = Files.lines(Paths.get(pathSW + stopwordsFile)).collect(Collectors.toList());
-			MeasuresContainer container = new MeasuresContainer();
-
-			for (QueryString query : queries.getTops()) {
-
-				String testQuery = query.getTitle() + " " + query.getDescription();
-				SolrClient client = SolRUtils.getClientInstance(indexName);
-				SolrQuery solRquery = new SolrQuery();
-				// ver http://www.solrtutorial.com/solrj-tutorial.html
-				solRquery.setQuery(TextMiningUtils.removeStopWords(testQuery, stopWords));
-				QueryResponse response = client.query(solRquery);
-
-				SolrDocumentList results = response.getResults();
-				List<ExpectedResult> expectedResultForQuery = SolRUtils.getExpectedResultsForQueryNumber(query,
-						expectedResult);
-				Measures measures = new Measures(query, results, expectedResultForQuery);
-				container.getList().add(measures);
-			}
-
-			Class<MeasuresContainer> classToMarshal = MeasuresContainer.class;
-			TextMiningUtils.objectsToXml(pathOutMeasures, fileOutMeasures, container, classToMarshal);
-		} catch (Exception e) {
-			e.printStackTrace();
-			Assert.fail();
-		}
 	}
 
-	@Test
-	public void allQueryDatasetEvalNormalFilterAnalisis() {
-		String pathQueries = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/arreglados/";
-		String fileQueries = "query.ohsu.1-63.norm.v2.xml";
-		String pathExpected = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
-		String fileExpected = "qrels.ohsu.batch.87";
-
-		String pathOutMeasures = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
-		String fileOutMeasures = "jaspa.queries.filterField.measures.xml";
-		String indexName = "tp1";
-
-		try {
-			QueryStringCollection queries = Trec87QueryNormalizer.parseQueries(pathQueries, fileQueries);
-			List<ExpectedResult> expectedResult = Trec87ResultParser.parseExpectedResults(pathExpected + fileExpected);
-
-			MeasuresContainer container = new MeasuresContainer();
-
-			for (QueryString query : queries.getTops()) {
-
-				String testQuery = query.getTitle() + " " + query.getDescription();
-				SolrClient client = SolRUtils.getClientInstance(indexName);
-				SolrQuery solRquery = new SolrQuery();
-
-				// http://stackoverflow.com/questions/10324969/boosting-fields-in-solr-using-solrj
-				solRquery.setQuery(
-						"TITLE:" + query.getTitle() + " ABSTRACT:" + query.getDescription() + " MESH:" + testQuery);
-				// solRquery.setQuery(testQuery);
-
-				QueryResponse response = client.query(solRquery);
-
-				SolrDocumentList results = response.getResults();
-				List<ExpectedResult> expectedResultForQuery = SolRUtils.getExpectedResultsForQueryNumber(query,
-						expectedResult);
-				Measures measures = new Measures(query, results, expectedResultForQuery);
-				container.getList().add(measures);
-			}
-
-			Class<MeasuresContainer> classToMarshal = MeasuresContainer.class;
-			TextMiningUtils.objectsToXml(pathOutMeasures, fileOutMeasures, container, classToMarshal);
-		} catch (Exception e) {
-			e.printStackTrace();
-			Assert.fail();
-		}
-	}
-
+	/** para probar si funciona el sacador de stopwords */
 	@Test
 	public void testStopWordMethod() {
 		String pathSW = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
@@ -765,6 +658,21 @@ public class TextMiningUtilsTest {
 			e.printStackTrace();
 		}
 
+	}
+	@Test
+	public void testToJson(){
+		String pathOutMeasures="/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/entregable/";
+		String outAggregated = "jaspa.final.aggregated.xml";
+		try {
+			System.out.println(TextMiningUtils.xmlToJson(pathOutMeasures+outAggregated));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 }
