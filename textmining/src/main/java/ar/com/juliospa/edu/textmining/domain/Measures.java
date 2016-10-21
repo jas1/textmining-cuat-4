@@ -26,9 +26,9 @@ public class Measures {
 	private double rPrecision;
 	private double fMeasure;
 	
-	private Integer totalRelevantes;
+	private Long totalRelevantes;
 	private Long relevantesObtenidos;
-	private Integer totalObtenidos;
+	private Long totalObtenidos;
 	
 	/**
 	 * mapa de relevantes  y su valor de relevancia o 0 si no encontrado.
@@ -46,8 +46,8 @@ public class Measures {
 		relevantsReport = mapForRelevanceBuild(results, expectedResultForQuery);
 		// filtro por los que dejaron diferente de 0
 		relevantesObtenidos = relevantsReport.entrySet().stream().filter(ent-> ent.getValue()!=0).count();
-		totalRelevantes = expectedResultForQuery.size();
-		totalObtenidos = results.size();
+		totalRelevantes = (long) expectedResultForQuery.size();
+		totalObtenidos = results.getNumFound();
 		//precision
 //		P = RELEVANTES OBTENIDOS vs TOTAL OBTENIDOS
 		precision = ((double)relevantesObtenidos) / totalObtenidos;
@@ -67,11 +67,11 @@ public class Measures {
 	es la precision evaluada en cantidad de documentos = total de R existentes para la query, 
 	o sea para el caso de query 1 ohsumed , 6 son relevantes, entonces precision top 6
 	*/	
-		Integer minValue = results.size();
+		Long minValue = totalObtenidos;
 		if (minValue < totalRelevantes) {
 			totalRelevantes = minValue;
 		}
-		topRPrecisionDocs = results.subList(0,totalRelevantes );
+		topRPrecisionDocs = results.subList(0,Math.toIntExact(totalRelevantes));
 		topRRelevantsReport = mapForRelevanceBuild(topRPrecisionDocs, expectedResultForQuery);
 		topRRelevantesObtenidos = topRRelevantsReport.entrySet().stream().filter(ent-> ent.getValue()!=0).count();
 		topRPrecisionCant = topRPrecisionDocs.size();
@@ -203,7 +203,7 @@ public class Measures {
 		return fMeasure;
 	}
 	@XmlElement(name="totalRelevantes")
-	public Integer getTotalRelevantes() {
+	public Long getTotalRelevantes() {
 		return totalRelevantes;
 	}
 	@XmlElement(name="relevantesObtenidos")
@@ -211,7 +211,7 @@ public class Measures {
 		return relevantesObtenidos;
 	}
 	@XmlElement(name="totalObtenidos")
-	public Integer getTotalObtenidos() {
+	public Long getTotalObtenidos() {
 		return totalObtenidos;
 	}
 
@@ -257,15 +257,23 @@ public class Measures {
 		this.fMeasure = fMeasure;
 	}
 
+	public void setTopRPrecisionCant(Integer topRPrecisionCant) {
+		this.topRPrecisionCant = topRPrecisionCant;
+	}
+
+	public void setTotalRelevantes(Long totalRelevantes) {
+		this.totalRelevantes = totalRelevantes;
+	}
+
 	public void setRelevantesObtenidos(Long relevantesObtenidos) {
 		this.relevantesObtenidos = relevantesObtenidos;
 	}
 
-	public void setTopRRelevantesObtenidos(Long topRRelevantesObtenidos) {
-		this.topRRelevantesObtenidos = topRRelevantesObtenidos;
+	public void setTotalObtenidos(Long totalObtenidos) {
+		this.totalObtenidos = totalObtenidos;
 	}
 
-	public void setTopRPrecisionCant(Integer topRPrecisionCant) {
-		this.topRPrecisionCant = topRPrecisionCant;
+	public void setTopRRelevantesObtenidos(Long topRRelevantesObtenidos) {
+		this.topRRelevantesObtenidos = topRRelevantesObtenidos;
 	}	
 }

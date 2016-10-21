@@ -3,6 +3,7 @@ package ar.com.juliospa.edu.textmining.utils;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
@@ -35,7 +36,8 @@ import edu.stanford.nlp.process.Stemmer;
  *
  */
 public class TextMiningUtils {
-
+	public static final String TAB = "\t";
+	public static final String ENTER = "\n";
 	/**
 	 * escanea la carpeta para ver los archivos que hay
 	 * 
@@ -176,6 +178,18 @@ public class TextMiningUtils {
 		}
 		JSONObject jsondata = XML.toJSONObject(str);
 		return jsondata.toString();
+	}
+	public static void writeBytesToFile(String pathFileName, byte[] bytesToWrite) {
+		File fileOut = new File(pathFileName);
+		
+		try (FileOutputStream fos = new FileOutputStream(fileOut)) {
+			fos.write(bytesToWrite);
+			fos.flush();
+			fos.close();
+			System.out.println(fileOut.getAbsolutePath());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

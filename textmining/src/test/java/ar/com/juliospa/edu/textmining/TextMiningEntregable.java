@@ -28,20 +28,22 @@ import ar.com.juliospa.edu.textmining.utils.Trec87QueryNormalizer;
 import ar.com.juliospa.edu.textmining.utils.Trec87ResultParser;
 
 /**
- * para tener todo el codigo de las cosas que irian al entregable
- * aca se realizan todas las ejecuciones dado que todo ya esta cargado
+ * para tener todo el codigo de las cosas que irian al entregable aca se
+ * realizan todas las ejecuciones dado que todo ya esta cargado
+ * 
  * @author julio
  *
  */
 public class TextMiningEntregable {
 
-	private String pathOutMeasures="/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/entregable/";
+	private String pathOutMeasures = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/entregable/";
 	private String outR1 = "jaspa.final.normal.measures.xml";
 	private String outR2 = "jaspa.final.edismaxconfig.measures.xml";
 	private String outR3 = "jaspa.final.stemmed.measures.xml";
 	private String outR4 = "jaspa.final.stopwords.measures.xml";
 	private String outR5 = "jaspa.final.filterField.measures.xml";
 	private String outAggregated = "jaspa.final.aggregated.xml";
+	private String outAggregatedAsTxt = "jaspa.final.aggregated.txt";
 
 	/**
 	 * ejecucion 1: index normal query normal
@@ -52,7 +54,6 @@ public class TextMiningEntregable {
 		String pathExpected = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
 		String fileExpected = "qrels.ohsu.batch.87";
 
-	
 		String indexName = "tp1";
 
 		String runId = "[1] " + indexName;
@@ -72,6 +73,7 @@ public class TextMiningEntregable {
 				String testQuery = query.getTitle() + " " + query.getDescription();
 				SolrClient client = SolRUtils.getClientInstance(indexName);
 				SolrQuery solRquery = new SolrQuery();
+				solRquery.setRows(SolRUtils.MAX_ROWS);
 				// ver http://www.solrtutorial.com/solrj-tutorial.html
 				solRquery.setQuery(testQuery);
 				QueryResponse response = client.query(solRquery);
@@ -90,6 +92,7 @@ public class TextMiningEntregable {
 			Assert.fail();
 		}
 	}
+
 	/**
 	 * ejecucion 2: index normal query con edismax
 	 */
@@ -99,7 +102,6 @@ public class TextMiningEntregable {
 		String pathExpected = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
 		String fileExpected = "qrels.ohsu.batch.87";
 
-		
 		String indexName = "tp1";
 		String runId = "[2] " + indexName;
 		String indexComment = "default";
@@ -118,6 +120,8 @@ public class TextMiningEntregable {
 				String testQuery = query.getTitle() + " " + query.getDescription();
 				SolrClient client = SolRUtils.getClientInstance(indexName);
 				SolrQuery solRquery = new SolrQuery();
+				solRquery.setRows(SolRUtils.MAX_ROWS);
+
 				// ver http://www.solrtutorial.com/solrj-tutorial.html
 				solRquery.setQuery(testQuery);
 				solRquery.set("defType", "edismax");
@@ -137,8 +141,9 @@ public class TextMiningEntregable {
 			Assert.fail();
 		}
 	}
+
 	/**
-	 * ejecucion 3: index lower case y stemmed ,query lower case y stemmed 
+	 * ejecucion 3: index lower case y stemmed ,query lower case y stemmed
 	 */
 	public void run3IdxMinStemmedQueryMinStemmed() {
 
@@ -147,7 +152,6 @@ public class TextMiningEntregable {
 		String pathExpected = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
 		String fileExpected = "qrels.ohsu.batch.87";
 
-	
 		String indexName = "tp1-stemmer";
 		String runId = "[3] " + indexName;
 		String indexComment = "lower case ; stemmed ; title , abstract , mesh";
@@ -179,15 +183,15 @@ public class TextMiningEntregable {
 		}
 
 	}
+
 	/**
-	 * ejecucion 4: index lower case y stopwords ,query lower case y stopwords 
+	 * ejecucion 4: index lower case y stopwords ,query lower case y stopwords
 	 */
 	public void run4IdxMinStopWordsQueryMinStopWords() {
 		String pathQueries = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/arreglados/";
 		String fileQueries = "query.ohsu.1-63.norm.v2.xml";
 		String pathExpected = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
 		String fileExpected = "qrels.ohsu.batch.87";
-
 
 		String pathSW = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
 		String stopwordsFile = "stopwords.txt";
@@ -211,6 +215,7 @@ public class TextMiningEntregable {
 				String testQuery = query.getTitle() + " " + query.getDescription();
 				SolrClient client = SolRUtils.getClientInstance(indexName);
 				SolrQuery solRquery = new SolrQuery();
+				solRquery.setRows(SolRUtils.MAX_ROWS);
 				// ver http://www.solrtutorial.com/solrj-tutorial.html
 				solRquery.setQuery(TextMiningUtils.removeStopWords(testQuery, stopWords));
 				QueryResponse response = client.query(solRquery);
@@ -229,6 +234,7 @@ public class TextMiningEntregable {
 			Assert.fail();
 		}
 	}
+
 	/**
 	 * ejecucion 5: index normal ,query filtrada por campos
 	 */
@@ -238,7 +244,6 @@ public class TextMiningEntregable {
 		String pathExpected = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp1/";
 		String fileExpected = "qrels.ohsu.batch.87";
 
-		
 		String indexName = "tp1";
 
 		String runId = "[5] " + indexName;
@@ -258,6 +263,7 @@ public class TextMiningEntregable {
 				String testQuery = query.getTitle() + " " + query.getDescription();
 				SolrClient client = SolRUtils.getClientInstance(indexName);
 				SolrQuery solRquery = new SolrQuery();
+				solRquery.setRows(SolRUtils.MAX_ROWS);
 
 				// http://stackoverflow.com/questions/10324969/boosting-fields-in-solr-using-solrj
 				solRquery.setQuery(
@@ -280,20 +286,21 @@ public class TextMiningEntregable {
 			Assert.fail();
 		}
 	}
-	
+
 	/**
-	 * ejecutar cada configuracion, levantar los archivos generados y agregarlos en un archivo final.
+	 * ejecutar cada configuracion, levantar los archivos generados y agregarlos
+	 * en un archivo final.
 	 */
 	@Test
 	public void getAllRuns() {
-		
+
 		try {
 			run1IdxNormalQueryNormal();
 			run2IdxNormalQueryEdismax();
 			run3IdxMinStemmedQueryMinStemmed();
 			run4IdxMinStopWordsQueryMinStopWords();
 			run5normalQueryFilterFields();
-			
+
 			MeasuresContainer mR1 = leerResultadosXMLaObjeto(outR1);
 			MeasuresContainer mR2 = leerResultadosXMLaObjeto(outR2);
 			MeasuresContainer mR3 = leerResultadosXMLaObjeto(outR3);
@@ -306,11 +313,11 @@ public class TextMiningEntregable {
 			mcw.getList().add(mR3);
 			mcw.getList().add(mR4);
 			mcw.getList().add(mR5);
-			
+
 			Class<MeasureContainerWrapper> classToMarshal = MeasureContainerWrapper.class;
-			TextMiningUtils.objectsToXml(pathOutMeasures, outAggregated, mcw, classToMarshal);			
-	        TextMiningUtils.xmlToJson(pathOutMeasures + outAggregated);
-			
+			TextMiningUtils.objectsToXml(pathOutMeasures, outAggregated, mcw, classToMarshal);
+			TextMiningUtils.xmlToJson(pathOutMeasures + outAggregated);
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -318,9 +325,36 @@ public class TextMiningEntregable {
 		}
 
 	}
-	
+
+	/**
+	 * levanta el resultados agregado y lo transforma un txt para poer evaluar
+	 * ams facil.
+	 */
+	@Test
+	public void resultsToTxt() {
+
+		try {
+
+			File file = new File(pathOutMeasures + outAggregated);
+			JAXBContext jaxbContext = JAXBContext.newInstance(MeasureContainerWrapper.class);
+
+			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+			MeasureContainerWrapper measuresAll = (MeasureContainerWrapper) jaxbUnmarshaller.unmarshal(file);
+
+			String pathFileName = pathOutMeasures +outAggregatedAsTxt;
+			byte[] bytesToWrite = measuresAll.measuresAllToString().getBytes();
+			
+			TextMiningUtils.writeBytesToFile(pathFileName, bytesToWrite);
+		} catch (Exception e) {
+			e.printStackTrace();
+			Assert.fail();
+		}
+
+	}
+
 	/**
 	 * leer resultados del xml y levantarlos como objeto
+	 * 
 	 * @param file
 	 * @return
 	 * @throws Exception

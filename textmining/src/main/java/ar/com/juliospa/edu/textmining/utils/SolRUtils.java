@@ -17,7 +17,11 @@ import ar.com.juliospa.edu.textmining.domain.QueryStringCollection;
  *
  */
 public class SolRUtils {
-
+	/**
+	 * segun ver maximo de resultados esperados = 23.
+	 * esto es para cuantos docs fetchea de 1.
+	 */
+	public static final int MAX_ROWS = 25;
 	/**
 	 * para conectarse al indice de solR
 	 * el indice debe haber sido creado.
@@ -56,6 +60,8 @@ public class SolRUtils {
 		String testQuery = query.getTitle() +" "+ query.getDescription();
 		SolrClient client = getClientInstance(indexName);
 		SolrQuery solRquery = new SolrQuery();
+		// segun ver max de resultados esperados
+		solRquery.setRows(MAX_ROWS);
 		solRquery.setQuery(testQuery);
 		QueryResponse response = client.query(solRquery);
 		
@@ -74,10 +80,12 @@ public class SolRUtils {
 //		String stemedQUery = org.apache.lucene.analysis.en.PorterStemmer.stem(testQuery);
 		SolrClient client = getClientInstance(indexName);
 		SolrQuery solRquery = new SolrQuery();
+		solRquery.setRows(MAX_ROWS);
 		solRquery.setQuery(TextMiningUtils.stemSentence(testQuery));
 		QueryResponse response = client.query(solRquery);
 		
 		return response;
 	}
+	
 
 }
