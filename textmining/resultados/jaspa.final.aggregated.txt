@@ -1,0 +1,316 @@
+run_ID	index_comments	query_comments	query_id	total_obtenidos	total_relevantes	relevantes_obtenidos	top_r_precision_cant	precision	recall	r_precision	f_Measure	
+[1] tp1	default	title+desc ; no filter 	OHSU1	40595	6	5	6	0.0001231678778174652	0.8333333333333334	0.3333333333333333	0.0002462993522327036	
+[1] tp1	default	title+desc ; no filter 	OHSU2	49162	11	9	11	0.00018306822342459622	0.8181818181818182	0.36363636363636365	0.0003660545421267769	
+[1] tp1	default	title+desc ; no filter 	OHSU3	41823	23	12	23	0.0002869234631662004	0.5217391304347826	0.4782608695652174	0.0005735315203364718	
+[1] tp1	default	title+desc ; no filter 	OHSU4	49719	13	12	13	0.0002413564230978097	0.9230769230769231	0.7692307692307693	0.00048258666452183704	
+[1] tp1	default	title+desc ; no filter 	OHSU5	26242	6	3	6	0.00011432055483575947	0.5	0.3333333333333333	0.00022858884486437063	
+[1] tp1	default	title+desc ; no filter 	OHSU6	43605	6	2	6	0.000045866299736268775	0.3333333333333333	0	0.00009171997890440485	
+[1] tp1	default	title+desc ; no filter 	OHSU7	33060	7	4	7	0.00012099213551119177	0.5714285714285714	0.42857142857142855	0.000241933045029788	
+[1] tp1	default	title+desc ; no filter 	OHSU8	48125	8	4	8	0.00008311688311688311	0.5	0.25	0.00016620613716161468	
+[1] tp1	default	title+desc ; no filter 	OHSU9	31792	10	10	10	0.00031454453950679415	1	0.8	0.0006288912647003333	
+[1] tp1	default	title+desc ; no filter 	OHSU10	44021	7	3	7	0.00006814929238318075	0.42857142857142855	0.2857142857142857	0.00013627691469065138	
+[1] tp1	default	title+desc ; no filter 	OHSU11	38254	18	5	18	0.00013070528572175458	0.2777777777777778	0.2777777777777778	0.0002612876254180602	
+[1] tp1	default	title+desc ; no filter 	OHSU12	45480	6	6	6	0.00013192612137203166	1	0.8333333333333334	0.00026381743833267377	
+[1] tp1	default	title+desc ; no filter 	OHSU13	36531	21	7	21	0.00019161807779693958	0.3333333333333333	0.2857142857142857	0.00038301597723790757	
+[1] tp1	default	title+desc ; no filter 	OHSU14	48848	8	7	8	0.00014330167048804454	0.875	0.75	0.0002865564106762731	
+[1] tp1	default	title+desc ; no filter 	OHSU15	48260	6	6	6	0.00012432656444260256	1	0.6666666666666666	0.00024862221853893005	
+[1] tp1	default	title+desc ; no filter 	OHSU16	39042	13	5	13	0.00012806720967163568	0.38461538461538464	0.15384615384615385	0.0002560491614389963	
+[1] tp1	default	title+desc ; no filter 	OHSU17	47040	4	3	4	0.00006377551020408164	0.75	0.5	0.00012754017515517388	
+[1] tp1	default	title+desc ; no filter 	OHSU18	45326	18	5	18	0.00011031196222918413	0.2777777777777778	0.2777777777777778	0.00022053634438955538	
+[1] tp1	default	title+desc ; no filter 	OHSU19	815	7	1	7	0.001226993865030675	0.14285714285714285	0.14285714285714285	0.0024330900243309003	
+[1] tp1	default	title+desc ; no filter 	OHSU20	7890	7	5	7	0.0006337135614702154	0.7142857142857143	0.5714285714285714	0.0012663036596175761	
+[1] tp1	default	title+desc ; no filter 	OHSU21	46428	21	9	21	0.00019384853967433445	0.42857142857142855	0.42857142857142855	0.00038752179810114316	
+[1] tp1	default	title+desc ; no filter 	OHSU22	50655	6	1	6	0.000019741387819563714	0.16666666666666666	0	0.0000394780995242889	
+[1] tp1	default	title+desc ; no filter 	OHSU23	37654	12	11	12	0.0002921336378605195	0.9166666666666666	0.5833333333333334	0.000584081134179366	
+[1] tp1	default	title+desc ; no filter 	OHSU24	38845	12	10	12	0.00025743338911056766	0.8333333333333334	0.5	0.0005147077746609363	
+[1] tp1	default	title+desc ; no filter 	OHSU25	43242	5	0	5	0	0	0	�	
+[1] tp1	default	title+desc ; no filter 	OHSU26	43553	6	5	6	0.00011480265423736597	0.8333333333333334	0.8333333333333334	0.000229573681673133	
+[1] tp1	default	title+desc ; no filter 	OHSU27	48306	2	2	2	0.00004140272429925889	1	0.5	0.00008280202036929701	
+[1] tp1	default	title+desc ; no filter 	OHSU28	48696	13	6	13	0.0001232134056185313	0.46153846153846156	0.38461538461538464	0.00024636104210720814	
+[1] tp1	default	title+desc ; no filter 	OHSU29	46089	21	18	21	0.0003905487209529389	0.8571428571428571	0.8571428571428571	0.0007807417046193885	
+[1] tp1	default	title+desc ; no filter 	OHSU30	46395	17	7	17	0.00015087832740597046	0.4117647058823529	0.23529411764705882	0.00030164612600189607	
+[1] tp1	default	title+desc ; no filter 	OHSU31	45190	19	2	19	0.00004425757911042266	0.10526315789473684	0.10526315789473684	0.00008847795792873101	
+[1] tp1	default	title+desc ; no filter 	OHSU32	45499	18	3	18	0.00006593551506626519	0.16666666666666666	0.16666666666666666	0.00013181888085770152	
+[1] tp1	default	title+desc ; no filter 	OHSU33	49953	22	10	22	0.0002001881768862731	0.45454545454545453	0.36363636363636365	0.000400200100050025	
+[1] tp1	default	title+desc ; no filter 	OHSU34	45770	5	4	5	0.00008739348918505571	0.8	0	0.00017476788640087383	
+[1] tp1	default	title+desc ; no filter 	OHSU35	50229	19	17	19	0.00033844989946047105	0.8947368421052632	0.7368421052631579	0.0006766438465212546	
+[1] tp1	default	title+desc ; no filter 	OHSU36	47788	15	2	15	0.000041851510839541305	0.13333333333333333	0.13333333333333333	0.00008367675668891074	
+[1] tp1	default	title+desc ; no filter 	OHSU37	45467	18	7	18	0.00015395781555853697	0.3888888888888889	0.3333333333333333	0.00030779377816862703	
+[1] tp1	default	title+desc ; no filter 	OHSU38	45279	16	10	16	0.00022085293403122861	0.625	0.5	0.00044154983993818304	
+[1] tp1	default	title+desc ; no filter 	OHSU39	47552	16	5	16	0.00010514804845222073	0.3125	0.25	0.00021022536158762193	
+[1] tp1	default	title+desc ; no filter 	OHSU40	46161	12	3	12	0.00006498992656138298	0.25	0.25	0.0001299460723799623	
+[1] tp1	default	title+desc ; no filter 	OHSU41	47979	4	1	4	0.000020842451906042228	0.25	0.25	0.000041681428839380615	
+[1] tp1	default	title+desc ; no filter 	OHSU42	44030	4	0	4	0	0	0	�	
+[1] tp1	default	title+desc ; no filter 	OHSU43	40802	14	14	14	0.00034312043527278074	1	0.7142857142857143	0.0006860054880439043	
+[1] tp1	default	title+desc ; no filter 	OHSU44	48214	8	6	8	0.00012444518189737422	0.75	0.125	0.00024884907303720296	
+[1] tp1	default	title+desc ; no filter 	OHSU45	39777	7	0	7	0	0	0	�	
+[1] tp1	default	title+desc ; no filter 	OHSU46	43224	6	5	6	0.00011567647603183417	0.8333333333333334	0.3333333333333333	0.0002313208420078649	
+[1] tp1	default	title+desc ; no filter 	OHSU47	49408	16	8	16	0.00016191709844559586	0.5	0.375	0.0003237293622531564	
+[1] tp1	default	title+desc ; no filter 	OHSU48	32893	9	8	9	0.00024321284163803848	0.8888888888888888	0.4444444444444444	0.0004862926265880493	
+[1] tp1	default	title+desc ; no filter 	OHSU49	43725	14	3	14	0.0000686106346483705	0.21428571428571427	0.21428571428571427	0.0001371773474473582	
+[1] tp1	default	title+desc ; no filter 	OHSU50	43570	20	11	20	0.00025246729400963964	0.55	0.45	0.0005047029135122734	
+[1] tp1	default	title+desc ; no filter 	OHSU51	8962	18	8	18	0.0008926578888640928	0.4444444444444444	0.3333333333333333	0.0017817371937639197	
+[1] tp1	default	title+desc ; no filter 	OHSU52	39357	5	3	5	0.00007622532205198568	0.6	0.2	0.00015243127889842998	
+[1] tp1	default	title+desc ; no filter 	OHSU53	38700	6	3	6	0.00007751937984496124	0.5	0.16666666666666666	0.0001550147263990079	
+[1] tp1	default	title+desc ; no filter 	OHSU54	43282	8	5	8	0.00011552146388799039	0.625	0.5	0.00023100023100023105	
+[1] tp1	default	title+desc ; no filter 	OHSU55	96	10	0	10	0	0	0	�	
+[1] tp1	default	title+desc ; no filter 	OHSU56	44227	4	3	4	0.00006783186741130983	0.75	0.25	0.00013565146616626347	
+[1] tp1	default	title+desc ; no filter 	OHSU57	25832	4	3	4	0.0001161350263239393	0.75	0.5	0.00023223409196470042	
+[1] tp1	default	title+desc ; no filter 	OHSU58	35630	3	0	3	0	0	0	�	
+[1] tp1	default	title+desc ; no filter 	OHSU59	50727	10	4	10	0.00007885347053837207	0.4	0.3	0.00015767585785521416	
+[1] tp1	default	title+desc ; no filter 	OHSU60	48025	6	1	6	0.000020822488287350337	0.16666666666666666	0	0.00004163977431242322	
+[1] tp1	default	title+desc ; no filter 	OHSU61	48503	6	1	6	0.0000206172814052739	0.16666666666666666	0	0.00004122946257395535	
+[1] tp1	default	title+desc ; no filter 	OHSU62	45329	4	2	4	0.00004412186458999757	0.5	0	0.00008823594291134492	
+[1] tp1	default	title+desc ; no filter 	OHSU63	45083	4	0	4	0	0	0	�	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU1	40595	6	5	6	0.0001231678778174652	0.8333333333333334	0.3333333333333333	0.0002462993522327036	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU2	56	11	0	11	0	0	0	�	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU3	20	20	14	20	0.7	0.6086956521739131	0.7	0.6511627906976744	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU4	19	13	2	13	0.10526315789473684	0.15384615384615385	0.15384615384615385	0.125	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU5	26242	6	3	6	0.00011432055483575947	0.5	0.3333333333333333	0.00022858884486437063	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU6	3	3	0	3	0	0	0	�	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU7	33060	7	4	7	0.00012099213551119177	0.5714285714285714	0.42857142857142855	0.000241933045029788	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU8	0	0	0	0	�	0	�	�	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU9	31792	10	10	10	0.00031454453950679415	1	0.8	0.0006288912647003333	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU10	44021	7	3	7	0.00006814929238318075	0.42857142857142855	0.2857142857142857	0.00013627691469065138	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU11	38254	18	5	18	0.00013070528572175458	0.2777777777777778	0.2777777777777778	0.0002612876254180602	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU12	1	1	1	1	1	0.16666666666666666	1	0.2857142857142857	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU13	36531	21	7	21	0.00019161807779693958	0.3333333333333333	0.2857142857142857	0.00038301597723790757	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU14	34	8	0	8	0	0	0	�	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU15	48260	6	6	6	0.00012432656444260256	1	0.6666666666666666	0.00024862221853893005	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU16	39042	13	5	13	0.00012806720967163568	0.38461538461538464	0.15384615384615385	0.0002560491614389963	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU17	47040	4	3	4	0.00006377551020408164	0.75	0.5	0.00012754017515517388	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU18	1207	18	1	18	0.0008285004142502071	0.05555555555555555	0.05555555555555555	0.0016326530612244899	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU19	815	7	1	7	0.001226993865030675	0.14285714285714285	0.14285714285714285	0.0024330900243309003	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU20	7890	7	5	7	0.0006337135614702154	0.7142857142857143	0.5714285714285714	0.0012663036596175761	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU21	815	21	5	21	0.006134969325153374	0.23809523809523808	0.23809523809523808	0.011961722488038277	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU22	245	6	0	6	0	0	0	�	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU23	37654	12	11	12	0.0002921336378605195	0.9166666666666666	0.5833333333333334	0.000584081134179366	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU24	38845	12	10	12	0.00025743338911056766	0.8333333333333334	0.5	0.0005147077746609363	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU25	4	4	0	4	0	0	0	�	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU26	131	6	1	6	0.007633587786259542	0.16666666666666666	0.16666666666666666	0.0145985401459854	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU27	99	2	0	2	0	0	0	�	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU28	0	0	0	0	�	0	�	�	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU29	0	0	0	0	�	0	�	�	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU30	46395	17	7	17	0.00015087832740597046	0.4117647058823529	0.23529411764705882	0.00030164612600189607	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU31	45190	19	2	19	0.00004425757911042266	0.10526315789473684	0.10526315789473684	0.00008847795792873101	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU32	1	1	0	1	0	0	0	�	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU33	162	22	1	22	0.006172839506172839	0.045454545454545456	0.045454545454545456	0.010869565217391302	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU34	136	5	0	5	0	0	0	�	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU35	392	19	2	19	0.00510204081632653	0.10526315789473684	0.10526315789473684	0.0097323600973236	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU36	205	15	2	15	0.00975609756097561	0.13333333333333333	0.13333333333333333	0.01818181818181818	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU37	45467	18	7	18	0.00015395781555853697	0.3888888888888889	0.3333333333333333	0.00030779377816862703	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU38	195	16	0	16	0	0	0	�	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU39	9	9	0	9	0	0	0	�	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU40	404	12	2	12	0.0049504950495049506	0.16666666666666666	0.16666666666666666	0.009615384615384616	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU41	16	4	1	4	0.0625	0.25	0.25	0.1	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU42	404	4	0	4	0	0	0	�	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU43	40802	14	14	14	0.00034312043527278074	1	0.7142857142857143	0.0006860054880439043	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU44	51	8	1	8	0.0196078431372549	0.125	0	0.03389830508474576	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU45	39777	7	0	7	0	0	0	�	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU46	35	6	0	6	0	0	0	�	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU47	0	0	0	0	�	0	�	�	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU48	32893	9	8	9	0.00024321284163803848	0.8888888888888888	0.4444444444444444	0.0004862926265880493	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU49	43725	14	3	14	0.0000686106346483705	0.21428571428571427	0.21428571428571427	0.0001371773474473582	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU50	539	20	3	20	0.0055658627087198514	0.15	0.1	0.01073345259391771	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU51	8962	18	8	18	0.0008926578888640928	0.4444444444444444	0.3333333333333333	0.0017817371937639197	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU52	39357	5	3	5	0.00007622532205198568	0.6	0.2	0.00015243127889842998	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU53	38700	6	3	6	0.00007751937984496124	0.5	0.16666666666666666	0.0001550147263990079	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU54	43282	8	5	8	0.00011552146388799039	0.625	0.5	0.00023100023100023105	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU55	96	10	0	10	0	0	0	�	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU56	22	4	2	4	0.09090909090909091	0.5	0.5	0.15384615384615385	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU57	25832	4	3	4	0.0001161350263239393	0.75	0.5	0.00023223409196470042	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU58	35630	3	0	3	0	0	0	�	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU59	48	10	1	10	0.020833333333333332	0.1	0.1	0.034482758620689655	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU60	0	0	0	0	�	0	�	�	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU61	92	6	0	6	0	0	0	�	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU62	45329	4	2	4	0.00004412186458999757	0.5	0	0.00008823594291134492	
+[2] tp1	default	title+desc ; no filter ; edismax	OHSU63	2	2	0	2	0	0	0	�	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU1	40171	6	5	6	0.00012446789972865997	0.8333333333333334	0.16666666666666666	0.0002488986235906115	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU2	49157	11	10	11	0.0002034298268812173	0.9090909090909091	0.36363636363636365	0.0004067686300032541	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU3	41531	23	13	23	0.0003130191904842166	0.5652173913043478	0.5652173913043478	0.0006256918708186938	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU4	49779	13	11	13	0.00022097671708953576	0.8461538461538461	0.7692307692307693	0.0004418380462724936	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU5	26859	6	3	6	0.00011169440411035407	0.5	0.3333333333333333	0.00022333891680625346	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU6	43763	6	2	6	0.000045700706075908874	0.3333333333333333	0	0.00009138888254243872	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU7	32485	7	2	7	0.00006156687702016316	0.2857142857142857	0.2857142857142857	0.00012310722639418935	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU8	48140	8	4	8	0.00008309098462816784	0.5	0.25	0.00016615435739802273	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU9	20519	10	10	10	0.000487353184853063	1	0.7	0.0009742315748453408	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU10	43788	7	2	7	0.00004567461404951128	0.2857142857142857	0.2857142857142857	0.00009133462724055256	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU11	38287	18	6	18	0.00015671115522239925	0.3333333333333333	0.2777777777777778	0.000313275029369534	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU12	45562	6	5	6	0.00010974057328475484	0.8333333333333334	0.5	0.00021945224719101123	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU13	36841	21	7	21	0.00019000570017100514	0.3333333333333333	0.3333333333333333	0.00037979491074819596	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU14	47610	8	7	8	0.00014702793530770847	0.875	0.625	0.0002940064681422991	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU15	48313	6	4	6	0.0000827934510380229	0.6666666666666666	0.5	0.0001655663403630042	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU16	39115	13	3	13	0.0000766969193404065	0.23076923076923078	0.15384615384615385	0.0001533428746677571	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU17	32282	4	3	4	0.00009293104516448795	0.75	0	0.0001858390633711206	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU18	45307	18	5	18	0.00011035822279118017	0.2777777777777778	0.2777777777777778	0.00022062879205736347	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU19	365	7	0	7	0	0	0	�	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU20	7482	7	5	7	0.0006682705159048383	0.7142857142857143	0.5714285714285714	0.001335291761249833	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU21	46267	21	9	21	0.00019452309421401863	0.42857142857142855	0.42857142857142855	0.00038886968544763227	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU22	50626	6	1	6	0.000019752696243037175	0.16666666666666666	0.16666666666666666	0.00003950071101279823	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU23	37766	12	9	12	0.00023830959063708096	0.75	0.5	0.0004764677854836148	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU24	33029	12	10	12	0.0003027642374882679	0.8333333333333334	0.5	0.0006053085560364396	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU25	43302	5	1	5	0.000023093621541730173	0.2	0	0.00004618191054563927	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU26	43349	6	5	6	0.0001153429144847632	0.8333333333333334	0.5	0.0002306539038173221	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU27	48094	2	0	2	0	0	0	�	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU28	48665	13	6	13	0.00012329189355799857	0.46153846153846156	0.3076923076923077	0.0002465179341797116	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU29	43284	21	14	21	0.0003234451529433509	0.6666666666666666	0.6190476190476191	0.0006465766077820113	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU30	25342	17	4	17	0.00015784073869465709	0.23529411764705882	0.17647058823529413	0.00031546985291218107	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU31	45239	19	2	19	0.000044209642122947014	0.10526315789473684	0.10526315789473684	0.00008838216447920811	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU32	45114	18	1	18	0.00002216606818282573	0.05555555555555555	0.05555555555555555	0.000044314455375343434	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU33	48681	22	12	22	0.0002465027423430086	0.5454545454545454	0.5	0.0004927827854546948	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU34	45817	5	3	5	0.00006547787938974616	0.6	0.2	0.00013094146916328402	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU35	48782	19	16	19	0.00032798983231519826	0.8421052631578947	0.7368421052631579	0.0006557242679453291	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU36	47782	15	1	15	0.00002092838307312377	0.06666666666666667	0.06666666666666667	0.000041843630353369456	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU37	45436	18	7	18	0.00015406285764591954	0.3888888888888889	0.3333333333333333	0.0003080036960443526	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU38	45044	16	7	16	0.00015540360536364444	0.4375	0.375	0.0003106968486462495	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU39	47502	16	6	16	0.00012631047113805733	0.375	0.3125	0.0002525358811397786	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU40	43411	12	3	12	0.00006910690838727512	0.25	0.25	0.00013817562121456371	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU41	48058	4	1	4	0.000020808190103624785	0.25	0.25	0.00004161291664932795	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU42	43636	4	0	4	0	0	0	�	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU43	36483	14	14	14	0.00038374037222816104	1	0.7857142857142857	0.0007671863440830752	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU44	48324	8	5	8	0.0001034682559390779	0.625	0.25	0.00020690225937267237	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU45	39489	7	0	7	0	0	0	�	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU46	43151	6	4	6	0.00009269773585780168	0.6666666666666666	0.3333333333333333	0.00018536969668883377	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU47	47760	16	8	16	0.00016750418760469013	0.5	0.5	0.0003348961821835231	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU48	32900	9	8	9	0.00024316109422492402	0.8888888888888888	0.4444444444444444	0.0004861891883679237	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU49	43594	14	6	14	0.000137633619305409	0.42857142857142855	0.2857142857142857	0.000275178866263071	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU50	43378	20	11	20	0.00025358476647148324	0.55	0.55	0.0005069358034932485	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU51	7243	18	8	18	0.001104514703851995	0.4444444444444444	0.3888888888888889	0.0022035532295827023	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU52	39125	5	2	5	0.000051118210862619806	0.4	0.2	0.00010222335803731152	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU53	33458	6	3	6	0.00008966465419331699	0.5	0.16666666666666666	0.0001792971551518049	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU54	42707	8	5	8	0.00011707682581309856	0.625	0.375	0.00023410979749502518	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU55	44	10	0	10	0	0	0	�	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU56	43787	4	3	4	0.00006851348573777605	0.75	0.25	0.00013701445502500514	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU57	26630	4	3	4	0.00011265490048817123	0.75	0.5	0.00022527596305474206	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU58	35202	3	0	3	0	0	0	�	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU59	50777	10	5	10	0.0000984697796246332	0.5	0.3	0.00019690078169610332	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU60	47751	6	0	6	0	0	0	�	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU61	48182	6	0	6	0	0	0	�	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU62	45336	4	2	4	0.00004411505205576143	0.5	0	0.00008822232024702249	
+[3] tp1-stemmer	lower case ; stemmed ; title , abstract , mesh	title+desc ; lower case ; stemmed ; no filter	OHSU63	45420	4	0	4	0	0	0	�	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU1	15735	6	5	6	0.00031776294884016526	0.8333333333333334	0.3333333333333333	0.0006352836541515788	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU2	26264	11	9	11	0.0003426743831861103	0.8181818181818182	0.45454545454545453	0.0006850618458610847	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU3	10719	23	11	23	0.001026215132008583	0.4782608695652174	0.4782608695652174	0.002048035747533048	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU4	4141	13	12	13	0.0028978507606858247	0.9230769230769231	0.7692307692307693	0.005777563793933558	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU5	24677	6	3	6	0.00012157069335818779	0.5	0.3333333333333333	0.00024308228335291499	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU6	21022	6	4	6	0.00019027685282085435	0.6666666666666666	0	0.00038044512079132587	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU7	6796	7	4	7	0.0005885815185403178	0.5714285714285714	0.2857142857142857	0.001175951785976775	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU8	22518	8	4	8	0.00017763566924238386	0.5	0.25	0.00035514516558643347	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU9	31792	10	10	10	0.00031454453950679415	1	0.8	0.0006288912647003333	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU10	6396	7	3	7	0.00046904315196998124	0.42857142857142855	0.2857142857142857	0.0009370607527721381	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU11	5258	18	6	18	0.0011411182959300114	0.3333333333333333	0.2777777777777778	0.002274450341167551	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU12	25291	6	6	6	0.00023723854335534379	1	1	0.0004743645491560264	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU13	20891	21	9	21	0.0004308075247714327	0.42857142857142855	0.42857142857142855	0.0008607498087222649	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU14	28716	8	7	8	0.00024376654130101686	0.875	0.625	0.00048739729842640304	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU15	45097	6	6	6	0.0001330465441160166	1	0.6666666666666666	0.0002660576901758198	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU16	1635	13	4	13	0.0024464831804281344	0.3076923076923077	0.23076923076923078	0.0048543689320388345	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU17	46634	4	3	4	0.00006433074580777973	0.75	0.5	0.00012865045670912132	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU18	16857	18	5	18	0.00029661268315833185	0.2777777777777778	0.2222222222222222	0.0005925925925925926	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU19	10865	7	7	7	0.0006442705936493328	1	0.7142857142857143	0.0012877115526122149	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU20	7890	7	5	7	0.0006337135614702154	0.7142857142857143	0.5714285714285714	0.0012663036596175761	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU21	26953	21	1	21	0.0000371016213408526	0.047619047619047616	0	0.00007414547341884779	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU22	35063	6	1	6	0.000028520092405099392	0.16666666666666666	0	0.000057030425732128093	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU23	26203	12	11	12	0.0004197992596267603	0.9166666666666666	0.5833333333333334	0.0008392141903490368	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU24	23914	12	10	12	0.00041816509157815507	0.8333333333333334	0.5833333333333334	0.0008359107247345984	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU25	11361	5	1	5	0.00008802042073761112	0.2	0	0.00017596339961288053	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU26	18292	6	5	6	0.0002733435381587579	0.8333333333333334	0.6666666666666666	0.0005465078150617553	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU27	10453	2	2	2	0.00019133263178035013	1	0.5	0.00038259206121472975	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU28	4236	13	5	13	0.0011803588290840415	0.38461538461538464	0.38461538461538464	0.0023534949399858793	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU29	25199	21	18	21	0.0007143140600817493	0.8571428571428571	0.8095238095238095	0.0014274385408406028	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU30	46395	17	6	17	0.00012932428063368897	0.35294117647058826	0.23529411764705882	0.0002585538222873395	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU31	10581	19	2	19	0.00018901805122389188	0.10526315789473684	0.10526315789473684	0.0003773584905660377	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU32	22418	18	2	18	0.0000892140244446427	0.1111111111111111	0.05555555555555555	0.00017828489926903192	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU33	23552	22	11	22	0.0004670516304347826	0.5	0.36363636363636365	0.0009332315262577416	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU34	29809	5	4	5	0.00013418766144453016	0.8	0	0.00026833031461729386	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU35	25165	19	16	19	0.0006358036956089807	0.8421052631578947	0.7894736842105263	0.0012706480304955528	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU36	10155	15	2	15	0.00019694731659281143	0.13333333333333333	0.13333333333333333	0.00039331366764995085	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU37	12679	18	9	18	0.0007098351605016168	0.5	0.2777777777777778	0.0014176577144207293	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU38	21683	16	9	16	0.00041507171516856525	0.5625	0.4375	0.0008295313148071341	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU39	10833	16	4	16	0.00036924213052709313	0.25	0.1875	0.0007373951516268781	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU40	27287	12	4	12	0.0001465899512588412	0.3333333333333333	0.25	0.0002930510275101652	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU41	8944	4	1	4	0.00011180679785330948	0.25	0.25	0.0002235136343316942	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU42	9961	4	0	4	0	0	0	�	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU43	30935	14	14	14	0.00045256182317763053	1	0.7142857142857143	0.000904714207244176	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU44	4361	8	5	8	0.0011465260261407934	0.625	0.25	0.0022888532845044634	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU45	27929	7	1	7	0.00003580507715994128	0.14285714285714285	0	0.00007159221076746849	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU46	6845	6	4	6	0.0005843681519357195	0.6666666666666666	0.3333333333333333	0.0011677127426653043	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU47	24262	16	7	16	0.00028851702250432774	0.4375	0.375	0.0005766537606063102	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU48	4471	9	7	9	0.00156564526951465	0.7777777777777778	0.5555555555555556	0.003125	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU49	24942	14	3	14	0.00012027904738994468	0.21428571428571427	0.14285714285714285	0.00024042314473473312	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU50	11513	20	11	20	0.0009554416746286806	0.55	0.4	0.001907569582935923	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU51	8962	18	9	18	0.0010042401249721045	0.5	0.3888888888888889	0.0020044543429844097	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU52	11604	5	3	5	0.0002585315408479835	0.6	0.2	0.000516840382461883	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU53	24234	6	3	6	0.00012379301807378064	0.5	0.16666666666666666	0.00024752475247524753	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU54	24016	8	5	8	0.00020819453697534977	0.625	0.5	0.00041625041625041625	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU55	12672	10	3	10	0.00023674242424242425	0.3	0.2	0.0004731114966093676	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU56	17279	4	2	4	0.00011574743908791018	0.5	0.25	0.00023144130070010992	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU57	4495	4	2	4	0.0004449388209121246	0.5	0.5	0.0008890864636585909	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU58	17184	3	0	3	0	0	0	�	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU59	13106	10	5	10	0.0003815046543567831	0.5	0.3	0.0007624275693809087	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU60	17820	6	0	6	0	0	0	�	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU61	13110	6	1	6	0.00007627765064836003	0.16666666666666666	0	0.00015248551387618176	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU62	8112	4	2	4	0.0002465483234714004	0.5	0	0.0004928536224741252	
+[4] tp1-sw	lower case ; stopwords ; title , abstract , mesh	title+desc ; lower case ; stopwords ; no filter	OHSU63	3731	4	0	4	0	0	0	�	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU1	40266	6	5	6	0.0001241742412953857	0.8333333333333334	0.5	0.0002483114819229241	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU2	49036	11	9	11	0.0001835386246839057	0.8181818181818182	0.36363636363636365	0.0003669949232368952	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU3	41798	23	10	23	0.0002392458969328676	0.43478260869565216	0.43478260869565216	0.0004782286411133163	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU4	49697	13	12	13	0.0002414632674004467	0.9230769230769231	0.7692307692307693	0.0004828002414001207	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU5	25924	6	3	6	0.00011572288227125444	0.5	0.3333333333333333	0.00023139220979560357	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU6	43388	6	0	6	0	0	0	�	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU7	32897	7	4	7	0.0001215916344955467	0.5714285714285714	0.2857142857142857	0.00024313153415998054	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU8	48027	8	2	8	0.00004164324234284881	0.25	0.25	0.00008327261371916311	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU9	31416	10	9	10	0.00028647822765469827	0.9	0.8	0.0005727741360656781	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU10	44021	7	2	7	0.00004543286158878717	0.2857142857142857	0.14285714285714285	0.00009085127646043426	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU11	37989	18	4	18	0.00010529363763194609	0.2222222222222222	0.1111111111111111	0.00021048754176862156	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU12	45445	6	6	6	0.0001320277258224227	1	0.8333333333333334	0.0002640205936063013	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU13	36328	21	8	21	0.00022021581149526536	0.38095238095238093	0.2857142857142857	0.0004401771713114528	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU14	48771	8	7	8	0.00014352791617969695	0.875	0.625	0.00028700875376698996	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU15	48198	6	6	6	0.00012448649321548613	1	0.6666666666666666	0.00024894199651481205	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU16	38907	13	5	13	0.00012851157889325827	0.38461538461538464	0.23076923076923078	0.0002569373072970195	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU17	47040	4	3	4	0.00006377551020408164	0.75	0.25	0.00012754017515517388	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU18	45206	18	5	18	0.00011060478697518028	0.2777777777777778	0.16666666666666666	0.00022112152839200424	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU19	815	7	1	7	0.001226993865030675	0.14285714285714285	0.14285714285714285	0.0024330900243309003	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU20	7890	7	5	7	0.0006337135614702154	0.7142857142857143	0.5714285714285714	0.0012663036596175761	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU21	46407	21	11	21	0.0002370332061973409	0.5238095238095238	0.42857142857142855	0.00047385198587059524	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU22	50624	6	1	6	0.000019753476611883693	0.16666666666666666	0	0.00003950227138060439	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU23	37537	12	7	12	0.00018648267043184057	0.5833333333333334	0.25	0.0003728461477003382	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU24	38754	12	10	12	0.00025803787996077826	0.8333333333333334	0.5	0.0005159160088737554	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU25	43076	5	0	5	0	0	0	�	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU26	43413	6	5	6	0.00011517287448460139	0.8333333333333334	0.5	0.00023031391787005687	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU27	48286	2	2	2	0.00004141987325518784	1	0.5	0.00008283631544068919	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU28	48646	13	6	13	0.00012334004851375242	0.46153846153846156	0.38461538461538464	0.0002466141926467868	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU29	45955	21	16	21	0.00034816668480034817	0.7619047619047619	0.6666666666666666	0.0006960153123368715	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU30	46389	17	6	17	0.00012934100756644895	0.35294117647058826	0.23529411764705882	0.0002585872516484937	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU31	45073	19	2	19	0.00004437246244980365	0.10526315789473684	0.10526315789473684	0.00008870753126940477	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU32	45400	18	2	18	0.00004405286343612335	0.1111111111111111	0.1111111111111111	0.00008807080893038004	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU33	49940	22	9	22	0.00018021625951141368	0.4090909090909091	0.36363636363636365	0.00036027380809415153	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU34	45600	5	4	5	0.00008771929824561403	0.8	0	0.00017541936191207104	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU35	50171	19	17	19	0.0003388411632217815	0.8947368421052632	0.7368421052631579	0.0006774257820282924	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU36	47788	15	2	15	0.000041851510839541305	0.13333333333333333	0.06666666666666667	0.00008367675668891074	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU37	45302	18	7	18	0.00015451856430179683	0.3888888888888889	0.2222222222222222	0.00030891438658428946	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU38	45089	16	9	16	0.00019960522522122911	0.5625	0.4375	0.00039906883937479215	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU39	47473	16	6	16	0.00012638763086385946	0.375	0.25	0.000252690096653962	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU40	46069	12	1	12	0.000021706570578914237	0.08333333333333333	0.08333333333333333	0.00004340183589765847	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU41	47907	4	2	4	0.00004174755254973177	0.5	0.25	0.00008348813424891988	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU42	43970	4	0	4	0	0	0	�	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU43	40685	14	13	14	0.0003195280816025562	0.9285714285714286	0.7142857142857143	0.0006388363350450871	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU44	48214	8	1	8	0.00002074086364956237	0.125	0	0.00004147484550620049	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU45	39539	7	1	7	0.000025291484357216924	0.14285714285714285	0	0.0000505740150710565	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU46	43002	6	4	6	0.00009301892935212315	0.6666666666666666	0.16666666666666666	0.00018601190476190478	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU47	49363	16	8	16	0.00016206470433320503	0.5	0.375	0.0003240243828348083	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU48	32310	9	9	9	0.0002785515320334262	1	0.5555555555555556	0.0005569479253689781	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU49	43394	14	2	14	0.00004608932110430013	0.14285714285714285	0.14285714285714285	0.0000921489126428308	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU50	43382	20	5	20	0.00011525517495735559	0.25	0.25	0.00023040412884198886	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU51	8962	18	5	18	0.0005579111805400581	0.2777777777777778	0.2222222222222222	0.00111358574610245	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU52	38953	5	3	5	0.00007701589094549841	0.6	0.2	0.00015401201293700905	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU53	38187	6	3	6	0.0000785607667530835	0.5	0.16666666666666666	0.00015709685020815333	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU54	43244	8	5	8	0.00011562297659790954	0.625	0.375	0.00023120318135577545	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU55	96	10	0	10	0	0	0	�	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU56	43972	4	3	4	0.00006822523423997089	0.75	0.25	0.00013643805712206658	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU57	25832	4	2	4	0.0000774233508826262	0.5	0.5	0.00015482272797646694	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU58	35370	3	0	3	0	0	0	�	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU59	50708	10	3	10	0.000059162262364912836	0.3	0.3	0.0001183011948420679	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU60	47997	6	1	6	0.000020834635498051962	0.16666666666666666	0	0.00004166406266275025	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU61	48397	6	1	6	0.000020662437754406264	0.16666666666666666	0	0.00004131975290787761	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU62	45293	4	2	4	0.00004415693374252092	0.5	0	0.00008830606883458066	
+[5] tp1	default	title@title , desc@abstract , title+desc@mesh ; title , abstract , mesh	OHSU63	44954	4	0	4	0	0	0	�	
