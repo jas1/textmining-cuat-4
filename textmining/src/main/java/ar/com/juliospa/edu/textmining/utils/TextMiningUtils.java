@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -14,7 +15,10 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 import javax.xml.bind.JAXBContext;
@@ -38,6 +42,58 @@ import edu.stanford.nlp.process.Stemmer;
 public class TextMiningUtils {
 	public static final String TAB = "\t";
 	public static final String ENTER = "\n";
+	public static String RES_KEY_TOTAL_SIZE = "totalSize";
+	public static String RES_KEY_HTML = "html";
+	public static String RES_KEY_PHP = "php";
+	public static String RES_KEY_OTHER = "otros";
+	public static String RES_KEY_HTML_SIZE = "htmlSize";
+	public static String RES_KEY_PHP_SIZE = "phpSize";
+	public static String RES_KEY_OTHER_SIZE = "otrosSize";
+	/**
+	 * escanea la carpeta para ver los archivos que hay
+	 * 
+	 * @return
+	 */
+	public static Map<String, Long> resumenForFiles(String aPath) {
+		Path path = Paths.get(aPath);
+		Map<String, Long> mapa = new HashMap<String, Long>();
+		
+
+		mapa.put(RES_KEY_TOTAL_SIZE, 0l);
+		mapa.put(RES_KEY_HTML, 0l);
+		mapa.put(RES_KEY_PHP, 0l);
+		mapa.put(RES_KEY_OTHER, 0l);
+		mapa.put(RES_KEY_HTML_SIZE, 0l);
+		mapa.put(RES_KEY_PHP_SIZE, 0l);
+		mapa.put(RES_KEY_OTHER_SIZE, 0l);
+		try {
+			Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
+				@Override
+				public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+					if (!attrs.isDirectory()) {
+						if (file.toFile().getName().contains(RES_KEY_HTML) ){
+							mapa.put(RES_KEY_HTML, mapa.get(RES_KEY_HTML)+1);
+							mapa.put(RES_KEY_TOTAL_SIZE, mapa.get(RES_KEY_TOTAL_SIZE)+file.toFile().length());
+							mapa.put(RES_KEY_HTML_SIZE, mapa.get(RES_KEY_HTML_SIZE)+file.toFile().length());
+						}else
+						if (file.toFile().getName().contains(RES_KEY_PHP)) {
+							mapa.put(RES_KEY_PHP, mapa.get(RES_KEY_PHP)+1);
+							mapa.put(RES_KEY_TOTAL_SIZE, mapa.get(RES_KEY_TOTAL_SIZE)+file.toFile().length());
+							mapa.put(RES_KEY_PHP_SIZE, mapa.get(RES_KEY_PHP_SIZE)+file.toFile().length());
+						}else {
+							mapa.put(RES_KEY_OTHER, mapa.get(RES_KEY_OTHER)+1);
+							mapa.put(RES_KEY_TOTAL_SIZE, mapa.get(RES_KEY_TOTAL_SIZE)+file.toFile().length());
+							mapa.put(RES_KEY_OTHER_SIZE, mapa.get(RES_KEY_OTHER_SIZE)+file.toFile().length());
+						}
+					}
+					return FileVisitResult.CONTINUE;
+				}
+			});
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return mapa;
+	}
 	/**
 	 * escanea la carpeta para ver los archivos que hay
 	 * 
@@ -189,6 +245,18 @@ public class TextMiningUtils {
 			System.out.println(fileOut.getAbsolutePath());
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+	}
+	public static void mostrarEntryResumenCrawling(Entry<String, Long> entry) {
+		if (entry.getKey().contains("Size")) {
+			double bytes = entry.getValue();
+			double kilobytes = (bytes / 1024);
+			double megabytes = (kilobytes / 1024);
+			double gigabytes = (megabytes / 1024);
+			BigDecimal dec = new BigDecimal(bytes);
+			System.out.println(entry.getKey()+ TAB+ dec.toPlainString() + TAB +kilobytes+ TAB+megabytes + TAB+gigabytes);
+		}else{
+			System.out.println(entry.getKey() + TAB +entry.getValue());
 		}
 	}
 
