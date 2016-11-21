@@ -10,14 +10,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.junit.Assert;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import opennlp.tools.namefind.NameFinderME;
 import opennlp.tools.namefind.TokenNameFinderModel;
 import opennlp.tools.sentdetect.SentenceDetector;
 import opennlp.tools.tokenize.SimpleTokenizer;
+import opennlp.tools.tokenize.Tokenizer;
 import opennlp.tools.tokenize.TokenizerME;
 import opennlp.tools.tokenize.TokenizerModel;
+import opennlp.tools.util.InvalidFormatException;
 import opennlp.tools.util.Span;
 
 /**
@@ -30,9 +35,17 @@ import opennlp.tools.util.Span;
  *
  */
 public class ProbandoNER2 {
-
+	Logger log = LoggerFactory.getLogger(ProbandoNER2.class);
 	/**
 	 * aca saco data de como leer desde aca:
+	 * http://stackoverflow.com/questions/19293425/how-to-read-document-for-named-entity-recognition-in-opennlp
+	 * 
+	 * adaptado a lo que me interesa a mi.
+	 * 
+	 * resultado: trae demasiada mugre que no me interesa, que son cosas de WEB.
+	 * lo que me hace pensar que hay que tomar los datos del thread y posts no me interesan los menues y esas cosas
+	 * 
+	 * ver si con esto puedo limitarlo con alguna otra herramienta
 	 */
 	@Test
 	public void tutoMain() {
@@ -41,24 +54,27 @@ public class ProbandoNER2 {
 		String filesUrl = dBoxUrl + "NER/archivoPrueba";
 		
 
-		System.out.println("getting data");
-		List<String> docs = getMyDocsFromSomewhere(filesUrl);
-		System.out.println("\tdone getting data");
 
-//		for (String string : docs) {
-//			System.out.println(string);
-//		}
-		
-//		for (String docu : docs) {
-//			// you could also use the runnable here and launch in a diff thread
-//			// new OpenNLPNER(docu,
-//			// new SentenceDetectorME(new SentenceModel(new FileInputStream(new
-//			// File(modelPath + "en-sent.zip")))),
-//			// new NameFinderME(locModel), new TokenizerME(tm)).run();
-//
-//		}
+		try {
+			System.out.println("getting data");
+			List<String> docs = getMyDocsFromSomewhere(filesUrl);
+			System.out.println("\tdone getting data");
 
-		System.out.println("done");
+			TokenNameFinderModel model = new TokenNameFinderModel(new File(modelUrl));
+			NameFinderME finder = new NameFinderME(model);
+			Tokenizer tokenizer = SimpleTokenizer.INSTANCE;
+			
+			for (String doc : docs) {
+				String[] tokens = tokenizer.tokenize(doc);
+				Span[] nameSpans = finder.find(tokens);
+				log.info(Arrays.toString(Span.spansToStrings(nameSpans, tokens)));
+			}
+
+			System.out.println("done");
+		} catch (Exception e) {
+			e.printStackTrace();
+			Assert.fail();
+		}
 
 	}
 
@@ -77,6 +93,16 @@ public class ProbandoNER2 {
 		}
 		
 		return ret;
+	}
+	
+	private void procesarString(String modelUrl, String[] sentences)
+			throws IOException, InvalidFormatException {
+
+
+		for (String sentence : sentences) {
+
+
+		}
 	}
 
 }
