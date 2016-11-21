@@ -20,6 +20,18 @@ import cc.mallet.pipe.TokenSequenceRemoveStopwords;
 import cc.mallet.pipe.iterator.FileIterator;
 import cc.mallet.types.InstanceList;
 
+/**
+ * primera cosa que se me ocurrio
+ * dado dataset: 
+ * 1. clasificar documentos que sirven vs que no sirven
+ * 2. de los que sirven clasificar agarrar posts que sirven vs que no.
+ * 3. parsear lo especifico en lo que me sirve.
+ * 4. esto se dio de baja > se me ocurrio por regex y a la lona, mas facil. 
+ * 5. profe dijo proba derecho viejo con opennlp , y con regex como para comparar.
+ * @author julio
+ *
+ */
+@Deprecated
 public class ClasificarYMinar {
 
 	@Test

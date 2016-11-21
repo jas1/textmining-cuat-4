@@ -1,10 +1,8 @@
 package ar.com.juliospa.edu.textmining.tp3;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,12 +15,8 @@ import org.slf4j.LoggerFactory;
 
 import opennlp.tools.namefind.NameFinderME;
 import opennlp.tools.namefind.TokenNameFinderModel;
-import opennlp.tools.sentdetect.SentenceDetector;
 import opennlp.tools.tokenize.SimpleTokenizer;
 import opennlp.tools.tokenize.Tokenizer;
-import opennlp.tools.tokenize.TokenizerME;
-import opennlp.tools.tokenize.TokenizerModel;
-import opennlp.tools.util.InvalidFormatException;
 import opennlp.tools.util.Span;
 
 /**
@@ -95,14 +89,5 @@ public class ProbandoNER2 {
 		return ret;
 	}
 	
-	private void procesarString(String modelUrl, String[] sentences)
-			throws IOException, InvalidFormatException {
-
-
-		for (String sentence : sentences) {
-
-
-		}
-	}
 
 }
