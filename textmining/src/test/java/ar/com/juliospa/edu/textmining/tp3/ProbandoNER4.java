@@ -34,8 +34,8 @@ import opennlp.tools.tokenize.Tokenizer;
 import opennlp.tools.util.Span;
 
 /**
- * problema anterior: levanta el parse pero el parse viene con mucha mugre
- * necesito solo los posts, no todo
+ * otro enfoque de filtrado >
+ * usar regex para poder parsear mas especifico
  * @author julio
  *
  */
@@ -49,7 +49,6 @@ public class ProbandoNER4 {
 	@Test
 	public void probandoConParser() {
 		String dBoxUrl = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp3/";
-		String modelUrl = dBoxUrl + "NER/models/es-ner-person.bin";
 		String filesUrl = dBoxUrl + "NER/archivoPrueba";
 		String sampleFile = filesUrl + "/viernes-23-05-14-alan-fitzpatrick-gala-cordoba.html";
 		List<String> docs = getMyDocsFromSomewhere(filesUrl);
@@ -79,6 +78,7 @@ public class ProbandoNER4 {
 		}
 
 	}
+	
 	@Test
 	public void probandoConParserPorPartes() {	
 	    // Only get things under html -> body -> div (class=header)
