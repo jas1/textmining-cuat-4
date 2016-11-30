@@ -26,11 +26,12 @@ public class UrlGuardada {
 	
 	public UrlGuardada() {}
 	
-	public UrlGuardada(TipoUrl tipo,String nombreOriginal,String fuente,String url) {
+	public UrlGuardada(TipoUrl tipo,String nombreOriginal,String fuente,String url,String observacion) {
 		this.tipo=tipo;
 		this.url=url;
 		this.fuenteOriginal=fuente;
 		this.nombreOriginal=nombreOriginal;
+		this.observacion=observacion;
 	}
 	
 	@Override
