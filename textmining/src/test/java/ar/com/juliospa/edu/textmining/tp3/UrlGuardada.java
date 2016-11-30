@@ -1,5 +1,6 @@
 package ar.com.juliospa.edu.textmining.tp3;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class UrlGuardada {
@@ -105,5 +106,27 @@ public class UrlGuardada {
 
 	public void setCantThreads(Integer cantThreads) {
 		this.cantThreads = cantThreads;
+	}
+	
+	public String getFechaStr() {
+		if (fecha !=null) {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			return sdf.format(fecha);
+		}
+		return "NA";
+	}
+	
+	public String getNombreEventoStr() {
+		if (nombreEvento !=null) {
+			return nombreEvento;
+		}
+		return "NA";
+	}
+	
+	public String getLugarEventoStr() {
+		if (lugarEvento !=null) {
+			return lugarEvento;
+		}
+		return "NA";
 	}
 }
