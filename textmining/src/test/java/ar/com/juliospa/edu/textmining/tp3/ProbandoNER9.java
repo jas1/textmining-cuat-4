@@ -1,5 +1,7 @@
 package ar.com.juliospa.edu.textmining.tp3;
 
+import static org.junit.Assert.fail;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -7,11 +9,14 @@ import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -20,7 +25,6 @@ import java.util.stream.Collectors;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
-import static org.junit.Assert.*;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +33,14 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
-import junit.framework.AssertionFailedError;
+import ar.com.juliospa.edu.textmining.tp3.ner.ModelAppliedOutput;
+import ar.com.juliospa.edu.textmining.tp3.ner.NerOnDoc;
+import opennlp.tools.namefind.NameFinderME;
+import opennlp.tools.namefind.TokenNameFinderModel;
+import opennlp.tools.tokenize.SimpleTokenizer;
+import opennlp.tools.tokenize.Tokenizer;
+import opennlp.tools.util.InvalidFormatException;
+import opennlp.tools.util.Span;
 
 /**
  * regex con jsoup al estilo jquery
@@ -46,7 +57,9 @@ public class ProbandoNER9 {
 	Gson gson = new Gson();
 	Gson gsonPretty = new GsonBuilder().setPrettyPrinting().create();
 	String dbURl = "/home/julio/dev/text_mining/nc_eventos_pasados_wget/www.nightclubber.com.ar/";
-	String outputFolder = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp3/";
+	String dBoxUrl = "/home/julio/Dropbox/julio_box/educacion/maestria_explotacion_datos_uba/materias/cuat_4_text_mining/material/tp3/";
+	String modelsUrl = dBoxUrl + "NER/models/";
+	String outputFolder = dBoxUrl;
 	/*
 	 * pipeline de trabajo 1) filtrar que carpetas me interesa escanear 2)
 	 * escanar esas carpetas por los archivos que me interesan 3) procesar los
@@ -94,8 +107,6 @@ public class ProbandoNER9 {
 		// recorrer threads
 		OutputProcessNER out = patternRegexNer(resultThreads);
 
-		
-		
 		System.out.println(gsonPretty.toJson(out.getSetResultNers()));
 	}
 
@@ -111,6 +122,24 @@ public class ProbandoNER9 {
 
 		OutputProcessNER out = patternRegexNer(resultThreads);
 
+		out = procesarOpenNlpNER(resultThreads,out);
+		
+		StringBuilder build = showOutProcessAll(out);
+		writeOutputNERToFile(build);
+	}
+
+	private void writeOutputNERToFile(StringBuilder build) {
+		try {
+			String timeStamp = new SimpleDateFormat("yyyyMMdd-HHmmss").format(new Date());
+			Files.write(Paths.get(outputFolder + timeStamp + "_resumen_manual.txt"), build.toString().getBytes());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail();
+		}
+	}
+
+	private StringBuilder showOutProcessAll(OutputProcessNER out) {
 		StringBuilder build = new StringBuilder();
 		build.append("Resumen\n");
 		build.append(out.showResumen()).append("\n").append("\n");
@@ -118,49 +147,190 @@ public class ProbandoNER9 {
 		build.append("Raros\n");
 		build.append(gsonPretty.toJson(out.getCasosRaros())).append("\n").append("\n");
 		build.append("no Clasifica : getNoClasificaEvento\n");
-		build.append(gsonPretty.toJson(out.getNoClasificaEvento())).append("\n").append("\n");	
+		build.append(gsonPretty.toJson(out.getNoClasificaEvento())).append("\n").append("\n");
 		build.append("no Clasifica : getNoClasificaFechas\n");
-		build.append(gsonPretty.toJson(out.getNoClasificaFechas())).append("\n").append("\n");	
+		build.append(gsonPretty.toJson(out.getNoClasificaFechas())).append("\n").append("\n");
 		build.append("no Clasifica : getNoClasificaUbicacion\n");
-		build.append(gsonPretty.toJson(out.getNoClasificaUbicacion())).append("\n").append("\n");			
-//		System.out.println();
-		try {
-			String timeStamp = new SimpleDateFormat("yyyyMMdd-HHmmss").format(new Date());
-			Files.write(Paths.get(outputFolder+timeStamp+"_resumen_manual.txt"), build.toString().getBytes());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			fail();
-		}
-
-		// System.out.println(gsonPretty.toJson(out.getSetResultNers()));
+		build.append(gsonPretty.toJson(out.getNoClasificaUbicacion())).append("\n").append("\n");
+		build.append("Output OPEN NLP NER\n");
+		build.append(gsonPretty.toJson(out.getResultNERopenNLP())).append("\n").append("\n");
+		return build;
 	}
 
-	private String armarFrecuenciasNER(OutputProcessNER out){
-		
-		Map<String, Long> mapaLugar8 =
-				out.getSetResultNers().stream()
-						.collect(Collectors.groupingBy(UrlGuardada::getLugarEventoStr, Collectors.counting()));
-		Map<String, Long> mapaEvento8 =
-				out.getSetResultNers().stream()
-						.collect(Collectors.groupingBy(UrlGuardada::getNombreEventoStr, Collectors.counting()));
-		Map<String, Long> mapaFecha8 =
-				out.getSetResultNers().stream()
-						.collect(Collectors.groupingBy(UrlGuardada::getFechaStr, Collectors.counting()));
-		
-		
+	private String armarFrecuenciasOpenNLPNER(OutputProcessNER out) {
+
+//		out.getResultNERopenNLP().entrySet().stream().forEach(action);
+		StringBuilder build = new StringBuilder();
+		build.append("Frecuencia entidades:").append("\n");
+		/*TODO:
+		 * aca lo que hay que ahcer es la frecuencia  de entidades para cada modelo aplicado 
+		 * y luego comparar las frecuencias de entidades entre los modelos similares con los criterios que use.
+		 */
+
+		return build.toString();
+	}
+	
+	private String armarFrecuenciasNER(OutputProcessNER out) {
+
+		Map<String, Long> mapaLugar8 = out.getSetResultNers().stream()
+				.collect(Collectors.groupingBy(UrlGuardada::getLugarEventoStr, Collectors.counting()));
+		Map<String, Long> mapaEvento8 = out.getSetResultNers().stream()
+				.collect(Collectors.groupingBy(UrlGuardada::getNombreEventoStr, Collectors.counting()));
+		Map<String, Long> mapaFecha8 = out.getSetResultNers().stream()
+				.collect(Collectors.groupingBy(UrlGuardada::getFechaStr, Collectors.counting()));
+
 		StringBuilder build = new StringBuilder();
 		build.append("Frecuencia entidades:").append("\n");
 		build.append("Lugares:").append("\n");
 		mapaLugar8.entrySet().stream().sorted(Map.Entry.comparingByValue(Collections.reverseOrder()))
-			.forEach(en->build.append("\t").append(en.getKey()).append(": ").append(en.getValue()).append("\n"));
+				.forEach(en -> build.append("\t").append(en.getKey()).append(": ").append(en.getValue()).append("\n"));
 		build.append("\n").append("Eventos:").append("\n");
 		mapaEvento8.entrySet().stream().sorted(Map.Entry.comparingByValue(Collections.reverseOrder()))
-			.forEach(en->build.append("\t").append(en.getKey()).append(": ").append(en.getValue()).append("\n"));		
+				.forEach(en -> build.append("\t").append(en.getKey()).append(": ").append(en.getValue()).append("\n"));
 		build.append("\n").append("Fechas:").append("\n");
 		mapaFecha8.entrySet().stream().sorted(Map.Entry.comparingByValue(Collections.reverseOrder()))
-			.forEach(en->build.append("\t").append(en.getKey()).append(": ").append(en.getValue()).append("\n"));				
+				.forEach(en -> build.append("\t").append(en.getKey()).append(": ").append(en.getValue()).append("\n"));
 		return build.toString();
+	}
+
+	private OutputProcessNER procesarOpenNlpNER(List<UrlGuardada> resultThreads) {
+
+		OutputProcessNER res = new OutputProcessNER();
+		
+		return procesarOpenNlpNER(resultThreads, res);
+
+	}
+
+	private OutputProcessNER procesarOpenNlpNER(List<UrlGuardada> resultThreads, OutputProcessNER res) {
+		// obtenerd docs
+		Map<String, List<String>> docs = getDocAsValue(resultThreads);
+
+		// obtener modelos
+		Map<String, String> modelos = getModelsFromFolder(modelsUrl);
+
+		// aplicar modelos a documentos
+		Map<String, NerOnDoc> resultNER = applyModelsToDocs(docs, modelos, "docAllSentences");
+
+		
+		res.setResultNERopenNLP(resultNER);
+		
+		return res;
+	}
+
+	private Map<String, List<String>> getDocAsValue(List<UrlGuardada> resultThreads) {
+		Map<String, List<String>> ret = new HashMap<>();
+
+		for (UrlGuardada urlGuardada : resultThreads) {
+			List<String> currentFileSentnces = new ArrayList<>();
+			currentFileSentnces.add(urlGuardada.getNombreOriginal());
+			ret.put(urlGuardada.getUrl(), currentFileSentnces);
+		}
+
+		return ret;
+	}
+
+	private Map<String, NerOnDoc> applyModelsToDocs(Map<String, List<String>> docs, Map<String, String> models,
+			String docProcessId) {
+		Map<String, NerOnDoc> ret = new HashMap<>();
+		applyModelsToDocs(docs, models, docProcessId, ret);
+		return ret;
+	}
+
+	private void applyModelsToDocs(Map<String, List<String>> docs, Map<String, String> models, String docProcessId,
+			Map<String, NerOnDoc> ret) {
+		try {
+			// para cada doc
+			for (Entry<String, List<String>> docEntry : docs.entrySet()) {
+				log.info("start processing: " + docEntry.getKey());
+
+				NerOnDoc doc = ret.get(docEntry.getKey());
+				if (doc == null) {
+					doc = new NerOnDoc();
+				}
+
+				doc.getDocParsedSources().put(docProcessId, docEntry.getValue());
+
+				doc.setDocName(docEntry.getKey());
+				// aplico cada modelo
+				applyModelsToDoc(models, docEntry, doc, docProcessId);
+				// agrego el resultado de aplicar todo al documento en el
+				// resultado del proceso
+				ret.put(docEntry.getKey(), doc);
+			}
+
+		} catch (Exception e) {
+			log.error("--error: applyModelsToDocs", e);
+
+			// Assert.fail();
+		}
+	}
+
+	private void applyModelsToDoc(Map<String, String> models, Entry<String, List<String>> docEntry, NerOnDoc doc,
+			String docProcessId) throws IOException, InvalidFormatException {
+		for (Entry<String, String> modelEntry : models.entrySet()) {
+			log.info("start model: " + modelEntry.getKey());
+			ModelAppliedOutput out = new ModelAppliedOutput();
+			out.setModelName(modelEntry.getKey());
+			out.setModelFullPath(modelEntry.getValue());
+
+			// declarando el modelo
+			TokenNameFinderModel model = new TokenNameFinderModel(new File(modelEntry.getValue()));
+			NameFinderME finder = new NameFinderME(model);
+			Tokenizer tokenizer = SimpleTokenizer.INSTANCE;
+			// aplicando el modelo y guardandolo en output
+			int count = 0;
+			for (String value : docEntry.getValue()) {
+				String[] tokens = tokenizer.tokenize(value);
+				Span[] nameSpans = finder.find(tokens);
+				// aca estaba tomando [] del array como string , entonces me
+				// daba cosas no vacias
+				String[] tmpArray = Span.spansToStrings(nameSpans, tokens);
+				String tmp = Arrays.toString(tmpArray);
+				tmp = tmp.replace("[", "").replace("]", "");
+				out.getEntities().add(tmp);
+				count = count + tmpArray.length;
+				// if (tmp.trim().length()>0) {
+				// count++;
+				// }
+			}
+			out.setEntitiesRecognized(count);
+			// agrego el resultado de aplicar el modelo al output final del
+			// documento
+
+			if (doc.getDocModelOutputs().get(docProcessId) == null) {
+				doc.getDocModelOutputs().put(docProcessId, new ArrayList<>());
+			}
+
+			doc.getDocModelOutputs().get(docProcessId).add(out);
+
+			log.info("end model: " + modelEntry.getKey() + " - entity count: " + count);
+		}
+	}
+
+	private Map<String, String> getModelsFromFolder(String modelsUrl) {
+		Map<String, String> ret = new HashMap<>();
+		try {
+			// lee todos los archivos de la URL
+			File startFileUrl = new File(modelsUrl);
+			File[] files = startFileUrl.listFiles();
+			for (File file : files) {
+				// si no es directorio se analiza
+				if (!file.isDirectory()) {
+					if (file.getName().endsWith(".bin")) {
+						ret.put(file.getName(), file.getAbsolutePath());
+					} else {
+						log.warn("no es archivo modelo:" + file.getAbsolutePath());
+					}
+				} else {
+					log.warn("no es archivo:" + file.getAbsolutePath());
+				}
+
+			}
+		} catch (Exception e) {
+			log.error("--error: " + modelsUrl, e);
+		}
+
+		return ret;
 	}
 
 	/**

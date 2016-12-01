@@ -1,7 +1,10 @@
 package ar.com.juliospa.edu.textmining.tp3;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+
+import ar.com.juliospa.edu.textmining.tp3.ner.NerOnDoc;
 
 public class OutputProcessNER {
 	private Set<UrlGuardada> setResultNers;
@@ -9,6 +12,8 @@ public class OutputProcessNER {
 	private Set<UrlGuardada> noClasificaUbicacion = new HashSet<>();
 	private Set<UrlGuardada> noClasificaEvento = new HashSet<>();
 	private Set<UrlGuardada> casosRaros = new HashSet<>();
+	
+	private Map<String, NerOnDoc> resultNERopenNLP;
 	
 	public OutputProcessNER() {
 	}
@@ -61,5 +66,13 @@ public class OutputProcessNER {
 
 	public void setCasosRaros(Set<UrlGuardada> casosRaros) {
 		this.casosRaros = casosRaros;
+	}
+
+	public Map<String, NerOnDoc> getResultNERopenNLP() {
+		return resultNERopenNLP;
+	}
+
+	public void setResultNERopenNLP(Map<String, NerOnDoc> resultNERopenNLP) {
+		this.resultNERopenNLP = resultNERopenNLP;
 	}
 }

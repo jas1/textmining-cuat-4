@@ -3,7 +3,7 @@ package ar.com.juliospa.edu.textmining.tp3.ner;
 import java.util.ArrayList;
 import java.util.List;
 /**
- * para vacilitar ver los resultados del modelo aplicado
+ * para facilitar ver los resultados del modelo aplicado
  * path al modelo
  * entities resultantes
  * @author julio
