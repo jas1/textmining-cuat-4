@@ -93,8 +93,11 @@ public class ProbandoNER9 {
 		}.getType());
 		// recorrer threads
 		OutputProcessNER out = patternRegexNer(resultThreads);
+		out = procesarOpenNlpNER(resultThreads, out);
 
 		System.out.println(gsonPretty.toJson(out.getSetResultNers()));
+		System.out.println("---------------------------------------");
+		System.out.println(gsonPretty.toJson(out.getResultNERopenNLP()));
 
 	}
 
@@ -122,8 +125,8 @@ public class ProbandoNER9 {
 
 		OutputProcessNER out = patternRegexNer(resultThreads);
 
-		out = procesarOpenNlpNER(resultThreads,out);
-		
+		out = procesarOpenNlpNER(resultThreads, out);
+
 		StringBuilder build = showOutProcessAll(out);
 		writeOutputNERToFile(build);
 	}
@@ -152,24 +155,97 @@ public class ProbandoNER9 {
 		build.append(gsonPretty.toJson(out.getNoClasificaFechas())).append("\n").append("\n");
 		build.append("no Clasifica : getNoClasificaUbicacion\n");
 		build.append(gsonPretty.toJson(out.getNoClasificaUbicacion())).append("\n").append("\n");
-		build.append("Output OPEN NLP NER\n");
+		build.append("\n\nOutput OPEN NLP NER\n");
+		build.append(armarFrecuenciasOpenNLPNER(out));
+		build.append("\n\nRAW Output OPEN NLP NER\n");
 		build.append(gsonPretty.toJson(out.getResultNERopenNLP())).append("\n").append("\n");
 		return build;
 	}
 
 	private String armarFrecuenciasOpenNLPNER(OutputProcessNER out) {
 
-//		out.getResultNERopenNLP().entrySet().stream().forEach(action);
+		// out.getResultNERopenNLP().entrySet().stream().forEach(action);
 		StringBuilder build = new StringBuilder();
 		build.append("Frecuencia entidades:").append("\n");
-		/*TODO:
-		 * aca lo que hay que ahcer es la frecuencia  de entidades para cada modelo aplicado 
-		 * y luego comparar las frecuencias de entidades entre los modelos similares con los criterios que use.
+		/*
+		 * TODO: aca lo que hay que ahcer es la frecuencia de entidades para
+		 * cada modelo aplicado y luego comparar las frecuencias de entidades
+		 * entre los modelos similares con los criterios que use.
 		 */
+
+		/*
+		 * paginas > resultados modelos > entidades
+		 * 
+		 * entidad > frecuencia > por modelo ( que es lo que en teoria depuraria
+		 * con mis filtros especificos )
+		 * 
+		 * pero que pasa si entre diferentes modelos hacen lo que hacebn mis
+		 * filtros especiales ? seria un agregado de todas las entidades.
+		 * 
+		 * entonces me conviene tener entidad > modelo > freq, entonces ante la
+		 * duda despues agrego los que tienen mismo nombre.
+		 * 
+		 */
+		// entidad modelo es la key , y contiene un FrecuenciaEntidadModelo
+		Map<String, FrecuenciaEntidadModelo> resultado = new HashMap<>();
+		// para cada documento
+		out.getResultNERopenNLP().entrySet().stream()
+				.forEach(docProcesado -> procesarEntradaFreqEntMod(docProcesado, resultado));
+
+		resultado.entrySet().stream().forEach(ent -> build.append(ent.getValue().getEntidad()).append("|")
+				.append(ent.getValue().getModel()).append("|").append(ent.getValue().getFreq()).append("\n"));
 
 		return build.toString();
 	}
-	
+
+	/**
+	 * cada entry tiene multiples entradas de diferentes modelos, actualizando
+	 * el mapa en diferentes lados. la cosa es armar para cada modelo las key
+	 * entity|modelo , y luego sumar 1 a la entidad no devuelve , actualiza el
+	 * mapa
+	 * 
+	 * @param ent
+	 * @param resultado
+	 */
+	private void procesarEntradaFreqEntMod(Entry<String, NerOnDoc> docProcesado,
+			Map<String, FrecuenciaEntidadModelo> resultado) {
+		// para cada out de documento
+		docProcesado.getValue().getDocModelOutputs().entrySet().stream()
+				.forEach(modOut -> procesarModOutForFreq(modOut, resultado));
+	}
+
+	/**
+	 * no devuelve, actualiza mapa
+	 * 
+	 * @param ent
+	 * @param resultado
+	 */
+	private void procesarModOutForFreq(Entry<String, List<ModelAppliedOutput>> modOut,
+			Map<String, FrecuenciaEntidadModelo> resultado) {
+		// para cada out del modelo
+		modOut.getValue().stream().forEach(ent -> procesarEntidadDeModelo(ent, resultado));
+	}
+
+	/**
+	 * no devuelve, actualiza mapa
+	 * 
+	 * @param ent
+	 * @param resultado
+	 */
+	private void procesarEntidadDeModelo(ModelAppliedOutput ent, Map<String, FrecuenciaEntidadModelo> resultado) {
+
+		for (String entity : ent.getEntities()) {
+			String key = entity + "|" + ent.getModelName();
+			FrecuenciaEntidadModelo freq = resultado.get(key);
+			if (freq == null) {
+				freq = new FrecuenciaEntidadModelo(entity, ent.getModelName());
+			}
+			freq.addOneToFreq();
+			resultado.put(key, freq);
+		}
+
+	}
+
 	private String armarFrecuenciasNER(OutputProcessNER out) {
 
 		Map<String, Long> mapaLugar8 = out.getSetResultNers().stream()
@@ -193,14 +269,6 @@ public class ProbandoNER9 {
 		return build.toString();
 	}
 
-	private OutputProcessNER procesarOpenNlpNER(List<UrlGuardada> resultThreads) {
-
-		OutputProcessNER res = new OutputProcessNER();
-		
-		return procesarOpenNlpNER(resultThreads, res);
-
-	}
-
 	private OutputProcessNER procesarOpenNlpNER(List<UrlGuardada> resultThreads, OutputProcessNER res) {
 		// obtenerd docs
 		Map<String, List<String>> docs = getDocAsValue(resultThreads);
@@ -211,9 +279,8 @@ public class ProbandoNER9 {
 		// aplicar modelos a documentos
 		Map<String, NerOnDoc> resultNER = applyModelsToDocs(docs, modelos, "docAllSentences");
 
-		
 		res.setResultNERopenNLP(resultNER);
-		
+
 		return res;
 	}
 
