@@ -503,7 +503,7 @@ public class ProbandoNER9 {
 			Set<UrlGuardada> casosRaros) {
 		// 1ro extraigo el patron que me interesa parsear, luego parseo a fecha
 		// para que sea valida
-		String datePatternMatches1 = "dd.MM.yy";
+		String datePatternMatches1 = "dd.MM.yyyy";
 		String datePattern1Regex = "[0-9]{2}.[0-9]{2}.[0-9]{4}"; // dd.MM.yyyy
 		boolean parsed = patternFechasResult(el, res, noClasificaFechas, casosRaros, datePatternMatches1,
 				datePattern1Regex);
@@ -737,8 +737,10 @@ public class ProbandoNER9 {
 		return retObj;
 	}
 
-	public List<String> escanearArchivosInteres() {
-		return null;
+	@Test
+	public void mostrarModelos() {
+		
+		getModelsFromFolder(modelsUrl).keySet().stream().forEach(System.out::println);
 	}
 
 }
