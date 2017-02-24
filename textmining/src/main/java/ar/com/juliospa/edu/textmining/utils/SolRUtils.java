@@ -8,8 +8,8 @@ import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.response.QueryResponse;
 
-import ar.com.juliospa.edu.textmining.domain.QueryString;
-import ar.com.juliospa.edu.textmining.domain.QueryStringCollection;
+import ar.com.juliospa.edu.textmining.domain.tp1.QueryString;
+import ar.com.juliospa.edu.textmining.domain.tp1.QueryStringCollection;
 
 /**
  * utilidades de solR

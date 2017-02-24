@@ -29,9 +29,9 @@ import javax.xml.bind.PropertyException;
 import org.json.JSONObject;
 import org.json.XML;
 
-import ar.com.juliospa.edu.textmining.domain.ExpectedResult;
-import ar.com.juliospa.edu.textmining.domain.QueryString;
-import ar.com.juliospa.edu.textmining.domain.QueryStringCollection;
+import ar.com.juliospa.edu.textmining.domain.tp1.ExpectedResult;
+import ar.com.juliospa.edu.textmining.domain.tp1.QueryString;
+import ar.com.juliospa.edu.textmining.domain.tp1.QueryStringCollection;
 import edu.stanford.nlp.process.Stemmer;
 
 /** utilidades varias para text mining

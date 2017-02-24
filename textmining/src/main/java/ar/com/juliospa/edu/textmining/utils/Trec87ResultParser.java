@@ -8,7 +8,7 @@ import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
-import ar.com.juliospa.edu.textmining.domain.ExpectedResult;
+import ar.com.juliospa.edu.textmining.domain.tp1.ExpectedResult;
 /**
  * para levantar los resultados esperados
  * @author julio

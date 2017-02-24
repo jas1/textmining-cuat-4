@@ -16,12 +16,12 @@ import org.apache.solr.common.SolrDocumentList;
 import org.junit.Assert;
 import org.junit.Test;
 
-import ar.com.juliospa.edu.textmining.domain.ExpectedResult;
-import ar.com.juliospa.edu.textmining.domain.MeasureContainerWrapper;
-import ar.com.juliospa.edu.textmining.domain.Measures;
-import ar.com.juliospa.edu.textmining.domain.MeasuresContainer;
-import ar.com.juliospa.edu.textmining.domain.QueryString;
-import ar.com.juliospa.edu.textmining.domain.QueryStringCollection;
+import ar.com.juliospa.edu.textmining.domain.tp1.ExpectedResult;
+import ar.com.juliospa.edu.textmining.domain.tp1.MeasureContainerWrapper;
+import ar.com.juliospa.edu.textmining.domain.tp1.Measures;
+import ar.com.juliospa.edu.textmining.domain.tp1.MeasuresContainer;
+import ar.com.juliospa.edu.textmining.domain.tp1.QueryString;
+import ar.com.juliospa.edu.textmining.domain.tp1.QueryStringCollection;
 import ar.com.juliospa.edu.textmining.utils.SolRUtils;
 import ar.com.juliospa.edu.textmining.utils.TextMiningUtils;
 import ar.com.juliospa.edu.textmining.utils.Trec87QueryNormalizer;

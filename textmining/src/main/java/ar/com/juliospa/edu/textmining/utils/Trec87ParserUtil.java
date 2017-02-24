@@ -3,8 +3,8 @@ package ar.com.juliospa.edu.textmining.utils;
 import java.io.File;
 import java.util.Scanner;
 
-import ar.com.juliospa.edu.textmining.domain.Doc;
-import ar.com.juliospa.edu.textmining.domain.DocCollection;
+import ar.com.juliospa.edu.textmining.domain.tp1.Doc;
+import ar.com.juliospa.edu.textmining.domain.tp1.DocCollection;
 
 /**
  * proceso para transformar el archivo TREC a objetos

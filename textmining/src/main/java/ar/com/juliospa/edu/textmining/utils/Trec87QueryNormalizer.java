@@ -7,8 +7,8 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
-import ar.com.juliospa.edu.textmining.domain.QueryString;
-import ar.com.juliospa.edu.textmining.domain.QueryStringCollection;
+import ar.com.juliospa.edu.textmining.domain.tp1.QueryString;
+import ar.com.juliospa.edu.textmining.domain.tp1.QueryStringCollection;
 
 /**
  * primer problema es que las queries no estan normalizadas.

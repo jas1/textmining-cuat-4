@@ -59,17 +59,9 @@ public class NerNewModelMilestonesTest {
 	@Test
 	public void m1CrearModeloBaseFile() {
 		try {
-			
 			String charsetName = "UTF-8";
 			Charset charset = Charset.forName(charsetName);
-			
-			// aca me invente yo el string input stream factory. porque no queria archivos.
-			// ObjectStream<String> lineStream = new PlainTextByLineStream(new StringInputStreamFactory(taggedString, charset), charset);
-			// ObjectStream<NameSample> sampleStream = new NameSampleDataStream(lineStream);
 
-			// vuelvo al default porque no me funciono
-			//InputStream stream = new ByteArrayInputStream(taggedString.getBytes(StandardCharsets.UTF_8));
-			//InputStream fileStream = new FileInputStream("en-ner-person.train");
 			File file = new File(trainFile);
 			ObjectStream<String> lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(file), charset);
 			ObjectStream<NameSample> sampleStream = new NameSampleDataStream(lineStream);
@@ -101,7 +93,6 @@ public class NerNewModelMilestonesTest {
 		String charsetName = "UTF-8";
 		Charset charset = Charset.forName(charsetName);
 		try {
-			//ObjectStream<String> lineStream = new PlainTextByLineStream(new StringInputStreamFactory(defaultString, charset), charset);
 			File file = new File(testFile);
 			ObjectStream<String> lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(file), charset);
 			ObjectStream<NameSample> sampleStream = new NameSampleDataStream(lineStream);
@@ -138,7 +129,6 @@ public class NerNewModelMilestonesTest {
 	@Test
 	public void m1CrearModeloBaseString() {
 		try {
-			
 			String charsetName = "UTF-8";
 			Charset charset = Charset.forName(charsetName);
 			
@@ -146,13 +136,6 @@ public class NerNewModelMilestonesTest {
 			ObjectStream<String> lineStream = new PlainTextByLineStream(new StringInputStreamFactory(taggedString, charset), charset);
 			ObjectStream<NameSample> sampleStream = new NameSampleDataStream(lineStream);
 
-			// vuelvo al default porque no me funciono
-			//InputStream stream = new ByteArrayInputStream(taggedString.getBytes(StandardCharsets.UTF_8));
-			//InputStream fileStream = new FileInputStream("en-ner-person.train");
-//			File file = new File(trainFile);
-//			ObjectStream<String> lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(file), charset);
-//			ObjectStream<NameSample> sampleStream = new NameSampleDataStream(lineStream);
-			
 			//http://www.javased.com/?api=opennlp.tools.namefind.NameFinderME
 			TokenNameFinderModel model;
 			try {
@@ -172,7 +155,6 @@ public class NerNewModelMilestonesTest {
 			e.printStackTrace();
 			Assert.fail(e.getMessage());
 		}
-		
 	}
 	@Test
 	public void m2AplicarModeloBaseString() {
@@ -193,7 +175,6 @@ public class NerNewModelMilestonesTest {
 		}
 		
 		try {
-			
 			TokenNameFinderModel model = new TokenNameFinderModel(new File(modelOutFileNameStr));
 			NameFinderME finder = new NameFinderME(model);
 			Tokenizer tokenizer = SimpleTokenizer.INSTANCE;
@@ -206,7 +187,108 @@ public class NerNewModelMilestonesTest {
 			e.printStackTrace();
 			Assert.fail();
 		}
+	}
+	
+	/**
+	 * aca entreno con lo que saque del TP3 con lo de NC, de reconocer fechas etc, 
+	 * me armo un archivo de training con eso
+	 * http://stackoverflow.com/questions/20440131/traning-opennlp-error
+	 *  
+	 */
+	@Test
+	public void m3EntrenarConCosasEncontradas(){
+		try {
+			String charsetName = "UTF-8";
+			Charset charset = Charset.forName(charsetName);
+
+			String trainFileNC = "C:/Users/jspairani/Dropbox/julio_box/educacion/autodidacta/textmining/NER/NC/model-nc-event.train";
+			String modelOutFileNameNC = "C:/Users/jspairani/Dropbox/julio_box/educacion/autodidacta/textmining/NER/NC/models/model-nc-event.bin";
+			
+//			String trainFileNC = "C:/Users/jspairani/Dropbox/julio_box/educacion/autodidacta/textmining/NER/NC/model-nc-artist-title.train";
+//			String modelOutFileNameNC = "C:/Users/jspairani/Dropbox/julio_box/educacion/autodidacta/textmining/NER/NC/models/model-nc-artist-title.bin";
+			
+//			String trainFileNC = "C:/Users/jspairani/Dropbox/julio_box/educacion/autodidacta/textmining/NER/NC/model-nc-artist.train";
+//			String modelOutFileNameNC = "C:/Users/jspairani/Dropbox/julio_box/educacion/autodidacta/textmining/NER/NC/models/model-nc-artist.bin";
+			
+//			String trainFileNC = "C:/Users/jspairani/Dropbox/julio_box/educacion/autodidacta/textmining/NER/NC/model-nc.train";
+//			String modelOutFileNameNC = "C:/Users/jspairani/Dropbox/julio_box/educacion/autodidacta/textmining/NER/NC/models/model-nc.bin";
+
+			File file = new File(trainFileNC); // taggeado a mano
+			ObjectStream<String> lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(file), charset);
+			ObjectStream<NameSample> sampleStream = new NameSampleDataStream(lineStream);
+			
+			//http://www.javased.com/?api=opennlp.tools.namefind.NameFinderME
+			TokenNameFinderModel model;
+			try {
+			  model = NameFinderME.train("es", "artist", sampleStream, TrainingParameters.defaultParams(),new TokenNameFinderFactory());
+			} finally {
+			  sampleStream.close();
+			}
+			OutputStream modelOut=null;
+			try {
+			  modelOut = new BufferedOutputStream(new FileOutputStream(new File(modelOutFileNameNC)));
+			  model.serialize(modelOut);
+			} finally {
+			  if (modelOut != null)
+				  modelOut.close();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			Assert.fail(e.getMessage());
+		}
+	}
+	@Test
+	public void m4AplicarConCosasEncontradas() {
+		String charsetName = "UTF-8";
+		Charset charset = Charset.forName(charsetName);
+		String modelOutFileNameNC = "C:/Users/jspairani/Dropbox/julio_box/educacion/autodidacta/textmining/NER/NC/models/model-nc-event.bin";
+		String testFileTxt = "C:/Users/jspairani/Dropbox/julio_box/educacion/autodidacta/textmining/NER/NC/model-nc.test.txt";
+		String testFileHTML = "C:/Users/jspairani/Dropbox/julio_box/educacion/autodidacta/textmining/NER/NC/nc_eventos_pasados_wget/www.nightclubber.com.ar/foro/86/eventos-pasados-del-2014-cordoba/345709/sabado-25-10-14-joseph-capriati-lokitas-cordoba.html";
+
+
+//		este modelo mezclado funciono bastante feo , creo que lo mejor es de a 1 cosa por vez
+//		voy a probar anotando directamente el HTML
+//		String modelOutFileNameNC = "C:/Users/jspairani/Dropbox/julio_box/educacion/autodidacta/textmining/NER/NC/models/model-nc.bin";
+//		String testFileTxt = "C:/Users/jspairani/Dropbox/julio_box/educacion/autodidacta/textmining/NER/NC/model-nc.test.txt";
 		
+		try {
+			File file = new File(testFileTxt);
+			ObjectStream<String> lineStream = new PlainTextByLineStream(new MarkableFileInputStreamFactory(file), charset);
+			ObjectStream<NameSample> sampleStream = new NameSampleDataStream(lineStream);
+			TokenNameFinderModel model = new TokenNameFinderModel(new File(modelOutFileNameNC));
+			TokenNameFinderEvaluator evaluator = new TokenNameFinderEvaluator(new NameFinderME(model));
+			evaluator.evaluate(sampleStream);
+			FMeasure result = evaluator.getFMeasure();
+
+			log.info(result.toString());
+		} catch (IOException e) {
+			e.printStackTrace();
+			Assert.fail(e.getMessage());
+		}
+		
+		try {
+			File file = new File(testFileHTML);
+			String doc = new String(Files.readAllBytes(file.toPath()));
+			
+//			String doc2 = new String(Files.readAllBytes(testFileHTML.toPath()));
+
+			
+			TokenNameFinderModel model = new TokenNameFinderModel(new File(modelOutFileNameNC));
+			NameFinderME finder = new NameFinderME(model);
+			Tokenizer tokenizer = SimpleTokenizer.INSTANCE;
+
+			String[] tokens = tokenizer.tokenize(doc);
+			Span[] nameSpans = finder.find(tokens);
+			log.info(Arrays.toString(Span.spansToStrings(nameSpans, tokens)));
+			log.info("done");
+			for (String span : Span.spansToStrings(nameSpans, tokens)) {
+				System.out.println(span);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			Assert.fail();
+		}
 	}
 	
 }

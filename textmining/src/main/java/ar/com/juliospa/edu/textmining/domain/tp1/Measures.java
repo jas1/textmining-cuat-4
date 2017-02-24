@@ -1,4 +1,4 @@
-package ar.com.juliospa.edu.textmining.domain;
+package ar.com.juliospa.edu.textmining.domain.tp1;
 
 import java.util.HashMap;
 import java.util.List;

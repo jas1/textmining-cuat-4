@@ -1,4 +1,4 @@
-package ar.com.juliospa.edu.textmining.tp3;
+package ar.com.juliospa.edu.textmining.domain.ner;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

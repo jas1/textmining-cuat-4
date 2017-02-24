@@ -34,6 +34,11 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
+import ar.com.juliospa.edu.textmining.domain.ner.FrecuenciaEntidadModelo;
+import ar.com.juliospa.edu.textmining.domain.ner.MatcherTimesException;
+import ar.com.juliospa.edu.textmining.domain.ner.OutputProcessNER;
+import ar.com.juliospa.edu.textmining.domain.ner.TipoUrl;
+import ar.com.juliospa.edu.textmining.domain.ner.UrlGuardada;
 import ar.com.juliospa.edu.textmining.tp3.ner.ModelAppliedOutput;
 import ar.com.juliospa.edu.textmining.tp3.ner.NerOnDoc;
 import opennlp.tools.namefind.NameFinderME;
