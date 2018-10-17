@@ -1,0 +1,8 @@
+# los output de maven
+/target/
+
+# el classpath dependiente de cada proyecto
+.classpath
+
+# el archivo de proyecto
+.project
